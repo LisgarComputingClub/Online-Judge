@@ -1,0 +1,22 @@
+{
+  "name": "online-judge",
+  "version": "1.0.0",
+  "description": "LCI Online Judge",
+  "main": "server.js",
+  "scripts": {
+    "test": "no thanks"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LisgarComputingClub/Online-Judge.git"
+  },
+  "keywords": [
+    "memes"
+  ],
+  "author": "Spencer \"The Whitest Man This Side of the Atlantic Ocean\" Whitehead",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/LisgarComputingClub/Online-Judge/issues"
+  },
+  "homepage": "https://github.com/LisgarComputingClub/Online-Judge#readme"
+}
