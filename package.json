@@ -4,7 +4,8 @@
   "description": "LCI Online Judge",
   "main": "server.js",
   "scripts": {
-    "test": "no thanks"
+    "test": "no thanks",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",

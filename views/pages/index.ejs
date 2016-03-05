@@ -3,18 +3,12 @@
 
 <!-- What a nice bootstrap template. Or at least it was until we got our hands on it! -->
 
-<script src="/js/jquery.js"></script>
-<script>
-$(function() {
-  $('#header').load("/include/header.html");
-  $('#footer').load("/include/footer.html");
-});
-</script>
-<div id="header"></div>
+<div id="header">
+	<% include ../partials/header.ejs %>
+</div>
+
 <body>
-
     <div id="wrapper">
-
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
@@ -24,10 +18,10 @@ $(function() {
                     </a>
                 </li>
                 <li>
-                    <a href="index.html">Main</a>
+                    <a href="/">Main</a>
                 </li>
                 <li>
-                    <a href="profile.html">Profile</a>
+                    <a href="/profile">Profile</a>
                 </li>
                 <li>
                     <a href="#">Problems</a>
@@ -82,4 +76,5 @@ $(function() {
 
 </body>
 <div id="footer"></div>
+    <% include ../partials/footer.ejs %>
 </html>
