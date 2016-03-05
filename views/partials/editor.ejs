@@ -1,0 +1,37 @@
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    Choose Language
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a id="set-lang-c">C</a></li>
+    <li><a id="set-lang-cpp">C++</a></li>
+    <li><a id="set-lang-ruby">Ruby</a></li>
+  </ul>
+</div>
+
+<style type="text/css" media="screen">
+	#editor {
+		height: 275px;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+	}
+</style>
+
+<pre id="editor"></pre>
+
+<script src="/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/javascript");
+    editor.setValue("This is code");
+    $(document).ready(function() {
+    	$(".dropdown-toggle").dropdown();
+    	$("#set-lang-c").click(function() {
+    		editor.getSession.setMode("ace/mode/c_cpp");
+    	});
+	});
+</script>
