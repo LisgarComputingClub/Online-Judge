@@ -1,3 +1,8 @@
-###LCI ONLINE JUDGE
+##Lisgar Collegiate Institute Online Judge
 
-#####LCI ONLINE JUDGE
+This is a project started by the 2015-2016 Lisgar Computing Club (LCC) heads. The aim of this project is to create an online judge specific to the LCC, to be used for computer science classes, as well as in preparation for contests such as the CCC and the ECOO.
+
+###How it Works
+
+The general idea behind it is as follows: MongoDB on top of Node.js/express with Bootstrap to provide a responsive, fast, and beautiful judge. Users will be able to log in, and solve problems uploaded by administrators. Checking will be done server side, likely in C++.
+
