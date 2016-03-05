@@ -39,6 +39,11 @@ server.get('/organizations', function(req, res) {
 	res.render('pages/organizations',{title:"Organizations"});
 });
 
+server.get(/\/problems\//, function(req, res) {
+	console.log(req.url);
+	res.render('pages/problems/' + req.url.substr(10), {title:req.url.substr(10)});
+});
+
 server.listen(8080, function() {
 	console.log("Listening on 8080");
 });

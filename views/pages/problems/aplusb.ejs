@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- What a nice bootstrap template. Or at least it was until we got our hands on it! -->
+
+<div id="header">
+    <% include ../../partials/header.ejs %>
+</div>
+
+<body>
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <% include ../../partials/sidebar.ejs %>
+        
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1>A plus B</h1>
+                        <h4>Problem Statement</h4>
+                        <p>Input will consist of 2 integers, A and B on the same line. Both A and B will be less than 100 in absolute value. Output A + B</p>
+                        <h4>Sample Input</h4>
+                        3 4 
+                        <h4>Sample Output</h4>
+                        7
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+</body>
+
+<div id="footer"></div>
+    <% include ../../partials/footer.ejs %>
+</html>
