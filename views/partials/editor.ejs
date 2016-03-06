@@ -4,9 +4,9 @@
     <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a id="set-lang-c">C</a></li>
-    <li><a id="set-lang-cpp">C++</a></li>
-    <li><a id="set-lang-ruby">Ruby</a></li>
+    <li><a data-target="#" id="set-lang-c">C</a></li>
+    <li><a data-target="#" id="set-lang-cpp">C++</a></li>
+    <li><a data-target="#" id="set-lang-ruby">Ruby</a></li>
   </ul>
 </div>
 
@@ -31,7 +31,10 @@
     $(document).ready(function() {
     	$(".dropdown-toggle").dropdown();
     	$("#set-lang-c").click(function() {
-    		editor.getSession.setMode("ace/mode/c_cpp");
+    		editor.getSession().setMode("ace/mode/c_cpp");
     	});
+      $("#set-lang-ruby").click(function() {
+        editor.getSession().setMode("ace/mode/ruby");
+      });
 	});
 </script>
