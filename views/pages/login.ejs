@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- What a nice bootstrap template. Or at least it was until we got our hands on it! -->
+
+<div id="header">
+	<% include ../partials/header.ejs %>
+</div>
+
+<body>
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <% include ../partials/sidebar.ejs %>
+        
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form method="post" action="/login_verify">
+                            <input type="text" name="username">
+                            <input type="text" name="password">
+                            <input type="submit" value="Submit">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+</body>
+
+<div id="footer"></div>
+    <% include ../partials/footer.ejs %>
+</html>
