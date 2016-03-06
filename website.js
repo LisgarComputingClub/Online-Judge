@@ -39,6 +39,15 @@ exports.server.get('/organizations', function(req, res) {
 	res.render('pages/organizations',{title:"Organizations"});
 });
 
+exports.server.get(/\/problems\//, function(req, res) {
+	res.render('pages/problems/' + req.url.substr(10), {title:req.url.substr(10)});
+});
+
+exports.server.get('/submit', function(req, res) {
+	console.log("request sent to /submit");
+});
+
 exports.server.listen(8080, function() {
 	console.log("Listening on 8080");
 });
+
