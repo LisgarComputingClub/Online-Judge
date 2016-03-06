@@ -1,2 +1,2 @@
 // Start the web server
-var website = require("website.js");
+var website = require("./website.js");
