@@ -2,10 +2,10 @@
   "name": "online-judge",
   "version": "1.0.0",
   "description": "LCI Online Judge",
-  "main": "server.js",
+  "main": "main.js",
   "scripts": {
     "test": "no thanks",
-    "start": "node server.js"
+    "start": "node main.js"
   },
   "repository": {
     "type": "git",
