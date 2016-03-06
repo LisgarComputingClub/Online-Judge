@@ -1,3 +1,7 @@
+<!-- now this is what i call web dev -->
+<br/><br/><hr><h3>Editor</h3>
+
+
 <div class="dropdown">
   <button class="btn btn-default dropdown-toggle" type="button" id="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
     Choose Language
@@ -12,8 +16,8 @@
 
 <style type="text/css" media="screen">
 	#editor {
-		height: 275px;
-		top: 0;
+		height: 400px;
+		top: 20px;
 		right: 0;
 		bottom: 0;
 		left: 0;
@@ -22,19 +26,47 @@
 
 <pre id="editor"></pre>
 
+<br/>
+<div class="container">
+  <div class="col-md-8"></div>
+  <button type="button" class="btn btn-default" id="submit">Submit</button>
+</div>
+
 <script src="/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
     var editor = ace.edit("editor");
+    var lang = "";
     editor.setTheme("ace/theme/monokai");
-    editor.getSession().setMode("ace/mode/javascript");
-    editor.setValue("This is code");
+    editor.setValue("Select your language from the dropdown box above");
     $(document).ready(function() {
     	$(".dropdown-toggle").dropdown();
     	$("#set-lang-c").click(function() {
+        editor.setValue("//Read input from STDIN, output to STDOUT");
+        $(".dropdown-toggle").html("C <span class=\"caret\"></span>");
+        lang = "c";
     		editor.getSession().setMode("ace/mode/c_cpp");
     	});
+      $("#set-lang-cpp").click(function() {
+        editor.setValue("//Read input from STDIN, output to STDOUT");
+        $(".dropdown-toggle").html("C++ <span class=\"caret\"></span>");
+        lang = "cpp";
+        editor.getSession().setMode("ace/mode/c_cpp");
+      });
       $("#set-lang-ruby").click(function() {
+        editor.setValue("#Read input from STDIN, output to STDOUT");
+        $(".dropdown-toggle").html("Ruby <span class=\"caret\"></span>");
+        lang = "ruby";
         editor.getSession().setMode("ace/mode/ruby");
+      });
+      $("#submit").click(function() {
+        var data = JSON.stringify({
+          'code': editor.getValue(),
+          'lang': lang,
+          'problem': prob
+        });
+        $.post("/views/pages/submit", {jsonString: data}, function(result) {
+          alert(result);
+        });
       });
 	});
 </script>

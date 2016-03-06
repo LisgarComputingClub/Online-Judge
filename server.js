@@ -40,8 +40,11 @@ server.get('/organizations', function(req, res) {
 });
 
 server.get(/\/problems\//, function(req, res) {
-	console.log(req.url);
 	res.render('pages/problems/' + req.url.substr(10), {title:req.url.substr(10)});
+});
+
+server.get('/submit', function(req, res) {
+	console.log("request sent to /submit");
 });
 
 server.listen(8080, function() {

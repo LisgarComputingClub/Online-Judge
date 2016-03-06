@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- What a nice bootstrap template. Or at least it was until we got our hands on it! -->
+
+<div id="header">
+    <% include ../../partials/header.ejs %>
+</div>
+
+<body>
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <% include ../../partials/sidebar.ejs %>
+        
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h5>2016 Canadian Computing Competition</h5>
+                        <h2>Problem S1: Ragaman</h2>
+                        <p>An anagram of a string is formed by rearranging the letters in the string. For example, the anagrams of aab are aab, aba, and baa.</p>
+                        <p>A wildcard anagram of a string is an anagram of the string where some of the letters might have been replaced with an asterisk (*). For example, two possible wildcard anagrams of aab are *ab and *b*.</p>
+                        <p>Given two strings, determine whether the second string is a wildcard anagram of the first string.</p>
+                        <h4>Input Format</h4>
+                        <p>The two lines of input will both consist of $N$ ( $1 \le N \le 100$) characters. Each character in the first line will be a lowercase letter. Each character in the second line will be either a lowercase letter or an asterisk.</p>
+                        <p>For 8 of the 15 available marks, the second line will not contain any asterisk characters.</p>
+                        <h4>Output Format</h4>
+                        <p>Output the character <span class="sampleio">A</span> if the string on the second line is a wildcard anagram of the string on the first line. Otherwise, output the character <span class="sampleio">N</span>.</p>
+                        <h4>Sample Input 1</h4>
+                        <p class="sampleio">abba</p>
+                        <p class="sampleio">baaa</p>
+                        <h4>Sample Output 1</h4>
+                        <p class="sampleio">N</p>
+                        <h4>Sample Input 2</h4>
+                        <p class="sampleio">cccrocks</p>
+                        <p class="sampleio">socc*rk*</p>
+                        <h4>Sample Output 2</h4>
+                        <p class="sampleio">A</p>
+                        <script>
+                            var prob = "ccc16s1";
+                        </script>
+                        <% include ../../partials/editor.ejs %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+</body>
+
+<div id="footer"></div>
+    <% include ../../partials/footer.ejs %>
+</html>
+

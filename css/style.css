@@ -1,7 +1,14 @@
-p {
-	font-face: garamond;
-}
 
 h4 {
 	color: #898286;
+}
+
+h5 {
+	color: #000000;
+	font-weight: 600;
+	font-size: 120%;
+}
+
+.sampleio {
+	font-family: Consolas,monaco,monospace;
 }
