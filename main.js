@@ -1,6 +1,6 @@
 // Check for updates
-var update = require("./update.js");
+var update = require("./js/update.js");
 update.checkUpdate();
 
 // Start the website
-var website = require("./website.js");
+var website = require("./js/website.js");
