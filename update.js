@@ -11,7 +11,7 @@ function execute(command, callback) {
 
 // Run a command to check for updates
 module.exports.checkUpdate = function(callback) {
-    execute("git status -uno", function(output) {
+    execute("git fetch && git status", function(output) {
         if (output.indexOf("Your branch is behind") > -1) {
             console.log("Update available. Automatically installing and rebooting.");
             
