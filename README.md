@@ -6,7 +6,7 @@ This is a project started by the 2015-2016 Lisgar Computing Club (LCC) heads. Th
 
 On Ubuntu, run the following console command:
 ```shell
-sudo apt-get install git && git clone https://github.com/LisgarComputingClub/Online-Judge-Install.git; cd Online-Judge-Install; bash install.sh
+sudo apt-get install git && git clone https://github.com/LisgarComputingClub/Online-Judge-Install.git; cd Online-Judge-Install; bash install.sh && cd ../Online-Judge
 ```
 
 The install script code is [here](https://github.com/LisgarComputingClub/Online-Judge-Install)
