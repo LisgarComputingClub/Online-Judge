@@ -15,9 +15,10 @@ module.exports.checkUpdate = function(callback) {
         if (output.indexOf("Your branch is behind") > -1) {
             console.log("Update available. Automatically installing and rebooting.");
             
-            // Start the update script
-            execute("bash update.sh");
-            process.exit();
+            // Start the update script and stop this server
+            execute("bash update.sh", function(updateOutput) {
+                process.exit();
+            });
         } else {
             console.log("No updates available.");
         }
