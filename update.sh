@@ -7,4 +7,4 @@ echo "Pulling latest version of the online judge..."
 git pull
 
 # Restart the server
-nodejs main
+bash start.sh
