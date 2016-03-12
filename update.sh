@@ -3,8 +3,8 @@
 # the Github repo and restarts the server.
 
 # Pull latest from Github repo
-echo "Attempting to pull latest version of online judge..."
+echo "Pulling latest version of the online judge..."
 git pull
 
-# Restarting server
-node main
+# Restart the server
+nodejs main
