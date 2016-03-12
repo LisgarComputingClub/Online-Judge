@@ -1,3 +1,5 @@
+// This module contains all the web server code.
+
 var http = require('http');
 var express = require('express');
 var MongoClient = require('mongodb').MongoClient;
