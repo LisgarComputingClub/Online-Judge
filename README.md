@@ -15,3 +15,5 @@ The install script code can be found [here](https://github.com/LisgarComputingCl
 ### How it Works
 
 The general idea behind it is as follows: MongoDB on top of Node.js/express with Bootstrap to provide a responsive, fast, and beautiful judge. Users will be able to log in, and solve problems uploaded by administrators. Checking will be done server side, likely in C++.
+
+The installation script runs the command located [here](https://gist.github.com/Porso7/1dea6140143961a3c762) to install the judge dependencies.
