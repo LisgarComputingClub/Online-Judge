@@ -13,7 +13,7 @@ function execute(command, callback) {
 module.exports.checkUpdate = function(callback) {
     execute("git fetch && git status", function(output) {
         if (output.indexOf("Your branch is behind") > -1) {
-            console.log("Update available. Automatically installing and rebooting.");
+            console.log("Automatically installing latest update.");
             
             cmd.execSync("bash update.sh");
             process.exit();
