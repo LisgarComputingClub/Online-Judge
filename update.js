@@ -1,11 +1,10 @@
 // This module automatically checks for updates from the Github repo
 // We're using child process
-var exec = require("child_process").exec;
-var execSync = require("exec-sync");
+var cmd = require("child_process");
 
 // This function executes a bash command asynchronously
 function execute(command, callback) {
-    exec(command, function(error, stdout, stderr) {
+    cmd.exec(command, function(error, stdout, stderr) {
         callback(stdout);
     });
 }
@@ -16,7 +15,7 @@ module.exports.checkUpdate = function(callback) {
         if (output.indexOf("Your branch is behind") > -1) {
             console.log("Update available. Automatically installing and rebooting.");
             
-            var update = execSync("bash update.sh");
+            cmd.execSync("bash update.sh");
             process.exit();
         } else {
             console.log("No updates available.");
