@@ -16,15 +16,15 @@ exports.server.set('view engine', 'ejs');
 exports.server.use('/', express.static(__dirname + '/'));
 
 exports.server.get('/', function(req, res) {
-	res.render('../pages/index',{title:"LCI Online Judge"});
+	res.render('pages/index',{title:"LCI Online Judge"});
 });
 
 exports.server.get('/index', function(req, res) {
-	res.render('../pages/index',{title:"LCI Online Judge"});
+	res.render('pages/index',{title:"LCI Online Judge"});
 });
 
 exports.server.get('/login', function(req, res) {
-	res.render('../pages/login',{title:"Log In"});
+	res.render('pages/login',{title:"Log In"});
 });
 
 exports.server.post('/login_verify', urlencodedParser, function(req, res) {
@@ -51,35 +51,35 @@ exports.server.post('/login_verify', urlencodedParser, function(req, res) {
 });
 
 exports.server.get('/signin', function(req, res) {
-	res.render('../pages/signin',{title:"LCI Online Judge"});
+	res.render('pages/signin',{title:"LCI Online Judge"});
 });
 
 exports.server.get('/profile', function(req, res) {
-	res.render('../pages/profile',{title:"Profile"});
+	res.render('pages/profile',{title:"Profile"});
 });
 
 exports.server.get('/users', function(req, res) {
-	res.render('../pages/users',{title:"Users"});
+	res.render('pages/users',{title:"Users"});
 });
 
 exports.server.get('/contests', function(req, res) {
-	res.render('../pages/contests',{title:"Contests"});
+	res.render('pages/contests',{title:"Contests"});
 });
 
 exports.server.get('/problems', function(req, res) {
-	res.render('../pages/problems',{title:"Problems"});
+	res.render('pages/problems',{title:"Problems"});
 });
 
 exports.server.get('/about', function(req, res) {
-	res.render('../pages/about',{title:"About"});
+	res.render('pages/about',{title:"About"});
 });
 
 exports.server.get('/organizations', function(req, res) {
-	res.render('../pages/organizations',{title:"Organizations"});
+	res.render('pages/organizations',{title:"Organizations"});
 });
 
 exports.server.get(/\/problems\//, function(req, res) {
-	res.render('../pages/problems/' + req.url.substr(10), {title:req.url.substr(10)});
+	res.render('pages/problems/' + req.url.substr(10), {title:req.url.substr(10)});
 });
 
 exports.server.get('/submit', function(req, res) {
