@@ -3,4 +3,4 @@ var update = require("./js/update.js");
 update.checkUpdate();
 
 // Start the website
-var website = require("./js/website.js");
+var website = require("./website.js");
