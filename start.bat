@@ -1,2 +1,2 @@
-REM Start the server
+::Start the server
 node main
