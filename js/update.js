@@ -40,12 +40,14 @@ module.exports.checkUpdate = function(callback) {
             switch(os.platform()) {
                 case "linux":
                     execute("bash update.sh", function (whoCares) {
-                        // seriously, who does?
+                        // seriously, who does? actually lets exit this process
+                        process.exit();
                     });
                     break;
                 case "win32":
                     execute("update.bat", function (whoCares) {
-                        // seriously, who does?
+                        // seriously, who does? actually lets exit this process
+                        process.exit();
                     });
                     break;
                 default:
