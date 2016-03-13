@@ -39,13 +39,13 @@ module.exports.checkUpdate = function(callback) {
             // Check platform
             switch(os.platform()) {
                 case "linux":
-                    execute("bash update.sh", function (whoCares) {
+                    execute("bash update/update.sh", function (whoCares) {
                         // seriously, who does? actually lets exit this process
                         process.exit();
                     });
                     break;
                 case "win32":
-                    execute("update.bat", function (whoCares) {
+                    execute("cd update && start update.bat", function (whoCares) {
                         // seriously, who does? actually lets exit this process
                         process.exit();
                     });
