@@ -39,10 +39,14 @@ module.exports.checkUpdate = function(callback) {
             // Check platform
             switch(os.platform()) {
                 case "linux":
-                    execute("bash update.sh");
+                    execute("bash update.sh", function (whoCares) {
+                        // seriously, who does?
+                    });
                     break;
                 case "win32":
-                    execute("update.bat");
+                    execute("update.bat", function (whoCares) {
+                        // seriously, who does?
+                    });
                     break;
                 default:
                     console.log("Sorry, your platform does not support auto-updating.");
