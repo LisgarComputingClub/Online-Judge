@@ -1,5 +1,6 @@
-// Include update checker
+// Include server update checker and languages update checker
 var checkUpdate = require("./js/updateServer.js").checkUpdate;
+var updateLanguages = require("./js/updateLanguages.js").updateLanguages;
 
 // Start the website
 var website = require("./website.js");
