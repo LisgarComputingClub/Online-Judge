@@ -10,27 +10,6 @@ function execute(command, callback) {
     });
 }
 
-// Run a command to check for updates
-module.exports.checkUpdate = function(callback) {
-    // Check if runing Linux
-    if (os.platform() == "linux") {
-        execute("git fetch && git status", function(output) {
-            if (output.indexOf("Your branch is behind") > -1) {
-                console.log("Automatically installing latest update.");
-                
-                execute("bash update.sh");
-                process.exit();
-            } else {
-                console.log("No updates available.");
-            }
-        });
-    } else {
-        // Not running Linux
-        console.log("Sorry, auto-update only works on Linux.");
-    }
-    // Check platform
-};
-
 module.exports.checkUpdate = function(callback) {
     execute("git fetch && git status", function(output) {
         if (output.indexOf("Your branch is behind") > -1) {
