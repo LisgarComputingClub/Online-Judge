@@ -23,6 +23,7 @@
     "ejs": "~2.4.1",
     "express": "~4.13.4",
     "forever": "^0.15.1",
+    "machinepack-hackerrank": "^0.1.2",
     "mongodb": "^2.1.7",
     "socket.io": "^1.4.5"
   }
