@@ -1,8 +1,26 @@
 // Include update checker
-var update = require("./js/update.js");
+var checkUpdate = require("./js/update.js").checkUpdate;
 
 // Start the website
 var website = require("./website.js");
 
+// Variables
+var updateDelay;
+
+// Check command line arguments
+if (process.argv.length > 2) {
+    process.argv.forEach(function (val, index, array) {
+        switch(true) {
+            case /^updateDelay=\d+$/.test(val):
+                var temp = val.split("=");
+                updateDelay = Number(temp[1]);
+                console.log("Update check delay set to " + updateDelay + "ms");
+        }
+    });
+}
+
+// Check for updates once on startup
+checkUpdate();
+
 // Check for updates on startup and every hour
-setInterval(update.checkUpdate(), 3600000);
+setInterval(function() { checkUpdate(); }, updateDelay);
