@@ -1,4 +1,4 @@
 #!/bin/bash
 # This script starts the server.
 
-node main
+forever -w main.js updateDelay=3600000
