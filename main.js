@@ -5,7 +5,7 @@ var checkUpdate = require("./js/update.js").checkUpdate;
 var website = require("./website.js");
 
 // Variables
-var updateDelay;
+var updateDelay = 1800000;
 
 // Check command line arguments
 if (process.argv.length > 2) {
