@@ -13,7 +13,7 @@ function execute(command, callback) {
 module.exports.checkUpdate = function() {
     execute("git fetch && git status", function(output) {
         if (output.indexOf("Your branch is behind") > -1) {
-            console.log("Automatically installing latest update.");
+            console.log("Automatically installing latest server update.");
             
             // Check platform
             switch(os.platform()) {
@@ -37,7 +37,7 @@ module.exports.checkUpdate = function() {
             }
             
         } else {
-            console.log("No updates available.");
+            console.log("No server updates available.");
         }
     });
 };
