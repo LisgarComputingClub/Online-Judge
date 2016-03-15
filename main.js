@@ -1,5 +1,5 @@
 // Include update checker
-var checkUpdate = require("./js/update.js").checkUpdate;
+var checkUpdate = require("./js/updateServer.js").checkUpdate;
 
 // Start the website
 var website = require("./website.js");
