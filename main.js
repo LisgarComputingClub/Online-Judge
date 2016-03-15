@@ -6,19 +6,29 @@ var updateLanguages = require("./js/updateLanguages.js").updateLanguages;
 var website = require("./website.js");
 
 // Variables
-var updateDelay = 1800000;
+var severUpdateDelay = 1800000;
+var languagesUpdateDelay = 1800000;
 
 // Check command line arguments
 if (process.argv.length > 2) {
     process.argv.forEach(function (val, index, array) {
         switch(true) {
-            case /^updateDelay=\d+$/.test(val):
+            case /^serverUpdateDelay=\d+$/.test(val):
                 var temp = val.split("=");
-                updateDelay = Number(temp[1]);
-                console.log("Update check delay set to " + updateDelay + "ms");
+                serverUpdateDelay = Number(temp[1]);
+                break;
+            case /^updateLanguagesDelay=\d+$/.test(val):
+                var temp = val.split("=");
+                languagesUpdateDelay = Number(temp[1]);
+                break;
         }
     });
 }
+
+// Log arguments to user
+console.log("Settings:");
+console.log("Server update delay: " + serverUpdateDelay + "ms");
+console.log("Langauges update delay: " + languagesUpdateDelay + "ms");
 
 // Check for updates once on startup
 checkUpdate();
