@@ -18,12 +18,14 @@ module.exports.checkUpdate = function() {
             // Check platform
             switch(os.platform()) {
                 case "linux":
+                    // Run update script
                     execute("bash update/update.sh", function (whoCares) {
                         // seriously, who does? actually lets exit this process
                         process.exit(1);
                     });
                     break;
                 case "win32":
+                    // Run update script
                     execute("cd update && start update.bat", function (whoCares) {
                         // seriously, who does? actually lets exit this process
                         process.exit(1);
