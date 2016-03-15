@@ -13,10 +13,14 @@ sudo apt-get install git && git clone https://github.com/LisgarComputingClub/Onl
 The install script code can be found [here](https://github.com/LisgarComputingClub/Online-Judge-Install).
 
 ## Command Line Arguments
-- Update Check Delay
-    - Sets the time in milliseconds in between update checks.
-    - Example: ```Shell node main updateDelay=3600000 ```
-    - Sets the update check delay to 1 hour (3600000 milliseconds)
+- Server update check delay
+    - Sets the time in milliseconds in between server update checks.
+    - Example: ```Shell node main serverUpdateDelay=3600000```
+    - Sets the server update check delay to 1 hour (3600000 milliseconds)
+- Language update delay
+    - Sets the time in milliseconds in between language update checks.
+    - Example: ```Shell node main updateLanguageDelay=3600000```
+    - Sets the language update delay to 1 hour (3600000 milliseconds)
     
 ### How it Works
 
