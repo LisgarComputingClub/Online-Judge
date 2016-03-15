@@ -37,7 +37,9 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
+# Languages file which gets auto-downloaded from HackerRank
+/languages.json
+
 # Visual Studio Code stuff
 .vscode
-
 typings
