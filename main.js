@@ -2,11 +2,18 @@
 var checkUpdate = require("./js/updateServer.js").checkUpdate;
 var updateLanguages = require("./js/updateLanguages.js").updateLanguages;
 
+// Check for server and languages updates once on startup
+checkUpdate();
+updateLanguages();
+
 // Start the website
 var website = require("./website.js");
 
+// Include code submision
+var submit = require("./js/submit");
+
 // Variables
-var severUpdateDelay = 1800000;
+var serverUpdateDelay = 1800000;
 var languagesUpdateDelay = 1800000;
 
 // Check command line arguments
@@ -30,8 +37,10 @@ console.log("Settings:");
 console.log("Server update delay: " + serverUpdateDelay + "ms");
 console.log("Langauges update delay: " + languagesUpdateDelay + "ms");
 
-// Check for updates once on startup
-checkUpdate();
 
-// Check for updates on startup and every hour
-setInterval(function() { checkUpdate(); }, updateDelay);
+
+// Check for server updates on a delay set by the user
+setInterval(function() { checkUpdate(); }, serverUpdateDelay);
+
+// Check for languages updates on a delay set by the user
+setInterval(function() { updateLanguages(); }, languagesUpdateDelay);
