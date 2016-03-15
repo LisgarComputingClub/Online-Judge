@@ -20,13 +20,13 @@ module.exports.checkUpdate = function(callback) {
                 case "linux":
                     execute("bash update/update.sh", function (whoCares) {
                         // seriously, who does? actually lets exit this process
-                        process.exit();
+                        process.exit(1);
                     });
                     break;
                 case "win32":
                     execute("cd update && start update.bat", function (whoCares) {
                         // seriously, who does? actually lets exit this process
-                        process.exit();
+                        process.exit(1);
                     });
                     break;
                 default:
