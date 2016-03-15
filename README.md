@@ -12,6 +12,12 @@ sudo apt-get install git && git clone https://github.com/LisgarComputingClub/Onl
 
 The install script code can be found [here](https://github.com/LisgarComputingClub/Online-Judge-Install).
 
+## Command Line Arguments
+- Update Check Delay
+    - Sets the time in milliseconds in between update checks.
+    - Example: ```Shell node main updateDelay=3600000 ```
+    - Sets the update check delay to 1 hour (3600000 milliseconds)
+    
 ### How it Works
 
 The general idea behind it is as follows: MongoDB on top of Node.js/express with Bootstrap to provide a responsive, fast, and beautiful judge. Users will be able to log in, and solve problems uploaded by administrators. Checking will be done server side, likely in C++.
