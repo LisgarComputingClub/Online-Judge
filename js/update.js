@@ -10,7 +10,7 @@ function execute(command, callback) {
     });
 }
 
-module.exports.checkUpdate = function(callback) {
+module.exports.checkUpdate = function() {
     execute("git fetch && git status", function(output) {
         if (output.indexOf("Your branch is behind") > -1) {
             console.log("Automatically installing latest update.");
@@ -38,4 +38,4 @@ module.exports.checkUpdate = function(callback) {
             console.log("No updates available.");
         }
     });
-}
+};
