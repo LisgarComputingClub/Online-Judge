@@ -1,2 +1,2 @@
 ::Start the server
-node main
+forever -w main.js
