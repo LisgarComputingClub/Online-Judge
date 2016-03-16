@@ -43,3 +43,4 @@ jspm_packages
 # Visual Studio Code stuff
 .vscode
 typings
+tsd.json
