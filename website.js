@@ -67,7 +67,11 @@ exports.server.get('/contests', function(req, res) {
 });
 
 exports.server.get('/problems', function(req, res) {
-	res.render('pages/problems',{title:"Problems"});
+    if(req.query.hasOwnProperty("problem")) {
+        res.render('pages/problems/' + req.query.problem + '.ejs',{title:"Problems"});
+    } else {
+        res.render('pages/problems',{title:"Problems"});
+    }
 });
 
 exports.server.get('/about', function(req, res) {
