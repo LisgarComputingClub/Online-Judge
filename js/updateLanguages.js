@@ -5,14 +5,14 @@ var request = require("sync-request");
 var fs = require("fs");
 
 // Synchronous file checking
-var exists = require("./exists.js").exists;
+var existsSync = require("./exists.js").existsSync;
 
 module.exports.updateLanguages = function() {
 
     console.log("Updating languages.");
 
     // Delete languages.json if exists
-    if (exists("languages.json")) {
+    if (existsSync("languages.json")) {
         fs.unlink("languages.json");
     }
 
