@@ -23,6 +23,7 @@
     "ejs": "~2.4.1",
     "express": "~4.13.4",
     "forever": "^0.15.1",
+    "jQuery": "^1.7.4",
     "machinepack-hackerrank": "^0.1.2",
     "mongodb": "^2.1.7",
     "simple-exist": "^1.0.5",
