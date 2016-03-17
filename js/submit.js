@@ -4,10 +4,8 @@ var HackerRank = require("machinepack-hackerrank");
 
 var languages = JSON.parse(fs.readFileSync('languages.json', 'utf8')).languages.codes;
 
-module.exports.evaluateCode = function(file, language, testcases, answers) {
-    var result = [];
-    var total = testcases.length;
-    var count = 0;
+module.exports.evaluateCode = function(file, language, testcases, answers, callback) {
+    var results = [];
     HackerRank.submitFile({
         apiKey: 'hackerrank|731195-684|a196c8ef286bf980b8b79ba0cff378e550678d5e',
         filePath: file,
@@ -18,19 +16,23 @@ module.exports.evaluateCode = function(file, language, testcases, answers) {
     }).exec({
         // Unexpected error
         error: function(err) {
-            console.log("Error: " + err);
+            throw err;
         },
-
         success: function(response) {
-            result = JSON.parse(response).result.stdout;
-            console.log(result);
-            console.log("Verify results: " + verifyResults(result, answers));
+            JSON.parse(response).result.stdout.forEach(function(val, index, array) {
+                if(val == answers[index]) {
+                    results.push(true);
+                } else {
+                    results.push(false);
+                }
+            });
+            callback(results);
         }
     });
-    count++;
 };
 
-function verifyResults(codeResults, results) {
+function verifyResults(codeResults, results, callback) {
+    console.log("verify");
     var result = [];
     codeResults.forEach(function(val, index, array) {
         if (val == results[index]) {
@@ -39,5 +41,6 @@ function verifyResults(codeResults, results) {
             result.push(false);
         }
     });
-    return result;
+    console.log(result);
+    callback(result);
 }
