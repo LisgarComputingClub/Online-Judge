@@ -1,41 +1,53 @@
 <!-- now this is what i call web dev -->
-<br/><br/><hr><h3>Editor</h3>
+<hr>
+<h3>Results</h3>
+<p id="codeResults">Results will be displayed here.</p>
 
-<p id="codeReturn">Return</p>
+<br>
+<hr>
+<h3>Editor</h3>
 
 <div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    Choose Language
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a data-target="#" id="set-lang-c">C</a></li>
-    <li><a data-target="#" id="set-lang-cpp">C++</a></li>
-    <li><a data-target="#" id="set-lang-ruby">Ruby</a></li>
-  </ul>
+    <button class="btn btn-default dropdown-toggle" type="button" id="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+    aria-expanded="true">
+        Choose Language
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+        <li><a data-target="#" id="set-lang-c">C</a></li>
+        <li><a data-target="#" id="set-lang-cpp">C++</a></li>
+        <li><a data-target="#" id="set-lang-ruby">Ruby</a></li>
+        <li><a data-target="#" id="set-lang-javascript">Javascript</a></li>
+    </ul>
 </div>
 
 <style type="text/css" media="screen">
-	#editor {
-		height: 400px;
-		top: 20px;
-		right: 0;
-		bottom: 0;
-		left: 0;
-	}
+    #editor {
+        height: 400px;
+        top: 20px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
 </style>
 
 <pre id="editor"></pre>
 
 <br/>
 <div class="container">
-  <div class="col-md-8"></div>
-  <button type="button" class="btn btn-default" id="submit">Submit</button>
+    <div class="col-md-8"></div>
+    <button type="button" class="btn btn-default" id="submit">Submit</button>
 </div>
 
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script src="/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
+    $(document).ready(function() {
+        editor.setValue("//Read input from STDIN, output to STDOUT");
+        $(".dropdown-toggle").html("C <span class=\"caret\"></span>");
+        lang = "c";
+        editor.getSession().setMode("ace/mode/c_cpp");
+    });
     <!-- Socket.io -->
     var socket = io.connect('http://localhost:8080');
     
@@ -58,6 +70,12 @@
         lang = "cpp";
         editor.getSession().setMode("ace/mode/c_cpp");
       });
+      $("#set-lang-javascript").click(function() {
+          editor.setValue("// Do stuff");
+          $(".dropdown-toggle").html("Javascript <span class=\"caret\"></span>");
+          lang = "javascript";
+          editor.getSession().setMode("ace/mode/javascript");
+      })
       $("#set-lang-ruby").click(function() {
         editor.setValue("#Read input from STDIN, output to STDOUT");
         $(".dropdown-toggle").html("Ruby <span class=\"caret\"></span>");
@@ -79,6 +97,12 @@
         $.post("/views/pages/submit", {jsonString: data}, function(result) {
           alert(result);
         });
+        
+        // Get results
+        socket.on("code results", function(results) {
+            $("#codeResults").text(results);
+        });
       });
 	});
+
 </script>

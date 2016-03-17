@@ -15,6 +15,9 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 // Simple file exist checking
 var exists = require("simple-exist");
 
+// Validate code submissions
+var HackerRank = require("./js/submit.js");
+
 // MongoDB
 var url = 'mongodb://localhost:27017/ONLINE_JUDGE';
 
@@ -102,7 +105,11 @@ exports.server.get(/\/problems\//, function(req, res) {
 exports.io.sockets.on("connection", function(socket) {
     console.log("Connect");
     socket.on("code submission", function(data) {
-        console.log(data);
+        // Validate code
+        data = JSON.parse(data);
+        HackerRank.evaluateCode(data.code, data.lang, ["1", "2", "3"], ["1\n", "1\n", "1\n"], function(results) {
+            io.emit("code results", results);
+        });
     });
 });
 
