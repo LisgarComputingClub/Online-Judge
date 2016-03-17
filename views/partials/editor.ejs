@@ -1,6 +1,7 @@
 <!-- now this is what i call web dev -->
 <br/><br/><hr><h3>Editor</h3>
 
+<p id="codeReturn">Return</p>
 
 <div class="dropdown">
   <button class="btn btn-default dropdown-toggle" type="button" id="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -32,8 +33,13 @@
   <button type="button" class="btn btn-default" id="submit">Submit</button>
 </div>
 
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script src="/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
+    <!-- Socket.io -->
+    var socket = io.connect('http://localhost:8080');
+    
+    <!-- Editor -->
     var editor = ace.edit("editor");
     var lang = "";
     editor.setTheme("ace/theme/monokai");
@@ -58,12 +64,18 @@
         lang = "ruby";
         editor.getSession().setMode("ace/mode/ruby");
       });
+      
+      // Submit button pressed
       $("#submit").click(function() {
+        // Turn data into a JSON string
         var data = JSON.stringify({
           'code': editor.getValue(),
           'lang': lang,
           'problem': prob
         });
+        
+        // Send JSON string to server over Socket.io
+        socket.emit("code submission", data);
         $.post("/views/pages/submit", {jsonString: data}, function(result) {
           alert(result);
         });

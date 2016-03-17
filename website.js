@@ -19,7 +19,13 @@ var exists = require("simple-exist");
 var url = 'mongodb://localhost:27017/ONLINE_JUDGE';
 
 // Start and configure web server
-exports.server = express();
+server = express();
+
+
+var io = require("socket.io").listen(server.listen(8080));
+exports.io = io;
+
+exports.server = server;
 
 exports.server.set('view engine', 'ejs');
 
@@ -93,21 +99,22 @@ exports.server.get(/\/problems\//, function(req, res) {
     res.render('pages/problems/' + req.url.substr(10), { title: req.url.substr(10) });
 });
 
-exports.server.get('/submit', function(req, res) {
-    console.log("request sent to /submit");
+exports.io.sockets.on("connection", function(socket) {
+    console.log("Connect");
+    socket.on("code submission", function(data) {
+        console.log(data);
+    });
 });
 
-exports.server.listen(8080, function() {
-    console.log("Listening on 8080");
-});
+
 
 // Decide which problem to serve to the user
 function getProblem(req, res) {
     // Check if the GET paramater "problem" was specified
-    if(req.query.hasOwnProperty("problem")) {
+    if (req.query.hasOwnProperty("problem")) {
         // It was, check if that problem exists
         problemExists(req.query.problem, function(data) {
-            if(data) {
+            if (data) {
                 // Problem exists, give it to the user
                 res.render('pages/problems/' + req.query.problem + '.ejs', { title: "Problems" });
             } else {
