@@ -49,7 +49,7 @@ var args = [
     { name: "Port", value: port}
 ];
 
-var t = new Table;
+var t = new Table();
 
 args.forEach(function(data) {
     t.cell("Argument", data.name);
