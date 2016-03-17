@@ -4,11 +4,11 @@ var HackerRank = require("machinepack-hackerrank");
 
 var languages = JSON.parse(fs.readFileSync('languages.json', 'utf8')).languages.codes;
 
-module.exports.evaluateCode = function(file, language, testcases, answers, callback) {
+module.exports.evaluateCode = function(code, language, testcases, answers, callback) {
     var results = [];
-    HackerRank.submitFile({
+    HackerRank.submit({
         apiKey: 'hackerrank|731195-684|a196c8ef286bf980b8b79ba0cff378e550678d5e',
-        filePath: file,
+        source: code,
         language: languages[language],
         testcases: testcases,
         wait: true,
@@ -30,17 +30,3 @@ module.exports.evaluateCode = function(file, language, testcases, answers, callb
         }
     });
 };
-
-function verifyResults(codeResults, results, callback) {
-    console.log("verify");
-    var result = [];
-    codeResults.forEach(function(val, index, array) {
-        if (val == results[index]) {
-            result.push(true);
-        } else {
-            result.push(false);
-        }
-    });
-    console.log(result);
-    callback(result);
-}
