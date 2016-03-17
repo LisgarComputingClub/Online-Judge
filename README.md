@@ -15,11 +15,11 @@ The install script code can be found [here](https://github.com/LisgarComputingCl
 ## Command Line Arguments
 - Server update check delay
     - Sets the time in milliseconds in between server update checks.
-    - Example: ```Shell node main serverUpdateDelay=3600000```
+    - Example: ```node main serverUpdateDelay=3600000```
     - Sets the server update check delay to 1 hour (3600000 milliseconds)
 - Language update delay
     - Sets the time in milliseconds in between language update checks.
-    - Example: ```Shell node main updateLanguageDelay=3600000```
+    - Example: ```node main updateLanguageDelay=3600000```
     - Sets the language update delay to 1 hour (3600000 milliseconds)
     
 ### How it Works
