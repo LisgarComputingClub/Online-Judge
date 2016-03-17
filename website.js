@@ -13,7 +13,7 @@ var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 // Simple file exist checking
-var exists = require("./js/exists.js");
+var exists = require("simple-exist");
 
 // MongoDB
 var url = 'mongodb://localhost:27017/ONLINE_JUDGE';

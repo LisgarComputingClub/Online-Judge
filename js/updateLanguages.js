@@ -5,7 +5,7 @@ var request = require("sync-request");
 var fs = require("fs");
 
 // Synchronous file checking
-var existsSync = require("./exists.js").existsSync;
+var existsSync = require("simple-exist").existsSync;
 
 module.exports.updateLanguages = function() {
 
