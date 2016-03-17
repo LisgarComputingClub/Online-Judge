@@ -106,8 +106,6 @@ exports.io.sockets.on("connection", function(socket) {
     });
 });
 
-
-
 // Decide which problem to serve to the user
 function getProblem(req, res) {
     // Check if the GET paramater "problem" was specified
