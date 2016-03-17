@@ -24,8 +24,22 @@ var url = 'mongodb://localhost:27017/ONLINE_JUDGE';
 // Start and configure web server
 server = express();
 
+var port;
 
-var io = require("socket.io").listen(server.listen(8080));
+if (process.argv.length > 2) {
+    process.argv.forEach(function (val, index, array) {
+        switch(true) {
+            case /^port=\d+$/.test(val):
+                var temp = val.split("=");
+                port = Number(temp[1]);
+                break;
+            default:
+                port = 8080;
+        }
+    });
+}
+
+var io = require("socket.io").listen(server.listen(port));
 exports.io = io;
 
 exports.server = server;

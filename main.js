@@ -15,6 +15,7 @@ var submit = require("./js/submit");
 // Variables
 var serverUpdateDelay = 1800000;
 var languagesUpdateDelay = 1800000;
+var port = 8080;
 
 // Check command line arguments
 if (process.argv.length > 2) {
@@ -28,6 +29,10 @@ if (process.argv.length > 2) {
                 var temp = val.split("=");
                 languagesUpdateDelay = Number(temp[1]);
                 break;
+            case /^port=\d+$/.test(val):
+                var temp = val.split("=");
+                port = Number(temp[1]);
+                break;
         }
     });
 }
@@ -36,8 +41,6 @@ if (process.argv.length > 2) {
 console.log("Settings:");
 console.log("Server update delay: " + serverUpdateDelay + "ms");
 console.log("Langauges update delay: " + languagesUpdateDelay + "ms");
-
-
 
 // Check for server updates on a delay set by the user
 setInterval(function() { checkUpdate(); }, serverUpdateDelay);
