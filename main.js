@@ -2,6 +2,10 @@
 var checkUpdate = require("./js/updateServer.js").checkUpdate;
 var updateLanguages = require("./js/updateLanguages.js").updateLanguages;
 
+// Fancy console output
+var Table = require("easy-table");
+var colours = require("colors");
+
 // Check for server and languages updates once on startup
 checkUpdate();
 updateLanguages();
@@ -38,9 +42,22 @@ if (process.argv.length > 2) {
 }
 
 // Log arguments to user
-console.log("Settings:");
-console.log("Server update delay: " + serverUpdateDelay + "ms");
-console.log("Langauges update delay: " + languagesUpdateDelay + "ms");
+console.log("\nSettings".green.bold.underline);
+var args = [
+    { name: "Server update check delay", value: serverUpdateDelay + " ms"},
+    { name: "Languages update delay", value: languagesUpdateDelay + " ms"},
+    { name: "Port", value: port}
+];
+
+var t = new Table;
+
+args.forEach(function(data) {
+    t.cell("Argument", data.name);
+    t.cell("Value", data.value);
+    t.newRow();
+});
+
+console.log("" + t.toString());
 
 // Check for server updates on a delay set by the user
 setInterval(function() { checkUpdate(); }, serverUpdateDelay);
