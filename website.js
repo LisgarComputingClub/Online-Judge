@@ -122,7 +122,9 @@ exports.io.sockets.on("connection", function(socket) {
         // Validate code
         data = JSON.parse(data);
         HackerRank.evaluateCode(data.code, data.lang, ["1", "2", "3"], ["1\n", "1\n", "1\n"], function(results) {
-            io.emit("code results", results);
+            socket.join("result");
+            io.to("result").emit("code results", results);
+            socket.leave("result");
         });
     });
 });
