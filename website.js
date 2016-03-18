@@ -137,7 +137,7 @@ function getProblem(req, res) {
         problemExists(req.query.problem, function(data) {
             if (data) {
                 // Problem exists, give it to the user
-                res.render('pages/problems/' + req.query.problem + '.ejs', { title: "Problems" });
+                res.render('pages/problems/' + req.query.problem + '.ejs', { title: "Problems", port: port });
             } else {
                 // Problem doesn't exist, give them the list of problems
                 res.render('pages/problems', { title: "Problems" });
