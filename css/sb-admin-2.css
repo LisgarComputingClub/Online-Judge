@@ -10,6 +10,7 @@ body {
 
 #wrapper {
     width: 100%;
+    background-color: #004034;
 }
 
 #page-wrapper {
@@ -25,6 +26,10 @@ body {
         padding: 0 30px;
         border-left: 1px solid #e7e7e7;
     }
+}
+
+navbar {
+    background-color: #004034;
 }
 
 .navbar-top-links {
@@ -85,6 +90,14 @@ body {
     left: auto;
 }
 
+.sidebar {
+    background-color: #004034;
+}
+
+.sidebar a {
+    color: #999999;
+}
+
 .sidebar .sidebar-nav.navbar-collapse {
     padding-right: 0;
     padding-left: 0;
@@ -95,11 +108,15 @@ body {
 }
 
 .sidebar ul li {
-    border-bottom: 1px solid #e7e7e7;
+    border-bottom: 0px solid #e7e7e7;
 }
 
 .sidebar ul li a.active {
-    background-color: #eee;
+    background-color: #33665D;
+}
+
+.sidebar ul li a:hover {
+    background-color: #33665D;
 }
 
 .sidebar .arrow {
