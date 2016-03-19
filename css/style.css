@@ -8,3 +8,13 @@ h5 {
 	font-weight: 600;
 	font-size: 120%;
 }
+
+.set-lang {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    
+    /* Only works in IE 10 or above. */
+    -ms-user-select: none;
+    user-select: none;
+}
