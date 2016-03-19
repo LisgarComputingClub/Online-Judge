@@ -11,11 +11,7 @@
         Choose Language
         <span class="caret"></span>
     </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-        <li><a data-target="#" class="set-lang" id="set-lang-c">C</a></li>
-        <li><a data-target="#" class="set-lang" id="set-lang-cpp">C++</a></li>
-        <li><a data-target="#" class="set-lang" id="set-lang-ruby">Ruby</a></li>
-        <li><a data-target="#" class="set-lang" id="set-lang-javascript">Javascript</a></li>
+    <ul style="height: 300px; overflow: auto" class="dropdown-menu" id="set-lang-dropdown" aria-labelledby="dropdownMenu1">
     </ul>
 </div>
 
@@ -40,74 +36,79 @@
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script src="/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
-    // Set default language
-    $(document).ready(function() {
-        editor.setValue("//Read input from STDIN, output to STDOUT");
-        $(".dropdown-toggle").html("C <span class=\"caret\"></span>");
-        lang = "c";
-        editor.getSession().setMode("ace/mode/c_cpp");
-    });
+    
+var codes, names;
+
+// Setup the editor
+var editor = ace.edit("editor");
+var lang = "";
+editor.setTheme("ace/theme/monokai");
+editor.setValue("Select your language from the dropdown box above");
+
+$(document).ready(function() {
     
     // Connect Socket.io to the server
     var socket = io.connect('http://<%= ip %>:<%= port %>');
     
-    // Setup the editor
-    var editor = ace.edit("editor");
-    var lang = "";
-    editor.setTheme("ace/theme/monokai");
-    editor.setValue("Select your language from the dropdown box above");
-    $(document).ready(function() {
-    	$(".dropdown-toggle").dropdown();
-    	$("#set-lang-c").click(function() {
-        editor.setValue("//Read input from STDIN, output to STDOUT");
-        $(".dropdown-toggle").html("C <span class=\"caret\"></span>");
-        lang = "c";
-    		editor.getSession().setMode("ace/mode/c_cpp");
-    	});
-      $("#set-lang-cpp").click(function() {
-        editor.setValue("//Read input from STDIN, output to STDOUT");
-        $(".dropdown-toggle").html("C++ <span class=\"caret\"></span>");
-        lang = "cpp";
-        editor.getSession().setMode("ace/mode/c_cpp");
-      });
-      $("#set-lang-javascript").click(function() {
-          editor.setValue("// Do stuff");
-          $(".dropdown-toggle").html("Javascript <span class=\"caret\"></span>");
-          lang = "javascript";
-          editor.getSession().setMode("ace/mode/javascript");
-      })
-      $("#set-lang-ruby").click(function() {
-        editor.setValue("#Read input from STDIN, output to STDOUT");
-        $(".dropdown-toggle").html("Ruby <span class=\"caret\"></span>");
-        lang = "ruby";
-        editor.getSession().setMode("ace/mode/ruby");
-      });
-      
-      // Request languages
-      socket.emit("languages request");
-      
-      // Receive languages
-      socket.on("languages", function(languages) {
-          // Do something with languages
-      });
-      
-      // Submit button pressed
-      $("#submit").click(function() {
+    // Initial editor settings
+    editor.setValue("Read input from STDIN, output to STDOUT");
+    $(".dropdown-toggle").html("C <span class=\"caret\"></span>");
+    lang = "c";
+    editor.getSession().setMode("ace/mode/c_cpp");
+    
+    $(".dropdown-toggle").dropdown();
+    
+    // Request languages
+    socket.emit("languages request");
+
+    // Receive languages
+    socket.on("languages", function(languagesIn) {
+        // Store languages
+        var languages = languagesIn.languages.names;
+
+        // Store codes
+        var codes = [];
+        for (var key in languages) {
+            codes.push(key);
+        }
+
+        // Store names
+        var names = Object.keys(languages).map(function(i) {
+            return languages[i];
+        });
+
+        names.forEach(function(val, index, array) {
+            $("#set-lang-dropdown").append('<li><a data-target="#" class="set-lang" id="' + codes[index] + '">' + val + '</a></li>');
+        });
+    });
+
+    // Submit button pressed
+    $("#submit").click(function() {
         // Turn data into a JSON string
         var data = JSON.stringify({
-          'code': editor.getValue(),
-          'lang': lang,
-          'problem': prob
+            'code': editor.getValue(),
+            'lang': lang,
+            'problem': prob
         });
         
         // Send JSON string to server over Socket.io
         socket.emit("code submission", data);
-        
-        // Get results
-        socket.on("code results", function(results) {
-            $("#codeResults").text(results);
-        });
-      });
-	});
+    });
+
+    // Get results
+    socket.on("code results", function(results) {
+        $("#codeResults").text(results);
+    });
+});
+
+$(document).on("click", ".set-lang", function(event) {
+    $(".dropdown-toggle").html($(this).text() + "<span class=\"caret\"></span>");
+    lang = event.target.id;
+    if(lang == "cpp") {
+        editor.getSession().setMode("ace/mode/c_cpp");
+    } else {
+        editor.getSession().setMode("ace/mode/" + event.target.id);
+    }
+});
 
 </script>
