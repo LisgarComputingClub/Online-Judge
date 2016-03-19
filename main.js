@@ -64,3 +64,9 @@ setInterval(function() { checkUpdate(); }, serverUpdateDelay);
 
 // Check for languages updates on a delay set by the user
 setInterval(function() { updateLanguages(); }, languagesUpdateDelay);
+setInterval(function() {
+    // Update languages.json
+    updateLanguages();
+    // Update languages in the webserver
+    website.updateLanguages();
+}, languagesUpdateDelay);

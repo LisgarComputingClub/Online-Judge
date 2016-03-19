@@ -1,5 +1,8 @@
 // This module contains all the web server code.
 
+// Filesystem access
+var fs = require("fs");
+
 // Website hosting
 var http = require('http');
 var express = require('express');
@@ -26,6 +29,9 @@ var url = 'mongodb://localhost:27017/ONLINE_JUDGE';
 
 // Start and configure web server
 server = express();
+
+// Store languages.json
+var languages = JSON.parse(fs.readFileSync("languages.json", "utf8"));
 
 // Store port
 var port;
@@ -173,3 +179,13 @@ function getProblem(req, res) {
 function problemExists(code, callback) {
     exists.exists('views/pages/problems/' + code + '.ejs', callback);
 }
+
+// Update languages.json
+module.exports.updateLanguages = function() {
+    fs.readFile("languages.json", "utf8", function(err, data) {
+        if(err) {
+            throw err;
+        }
+        languages = JSON.parse(data);
+    });
+};
