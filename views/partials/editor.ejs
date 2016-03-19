@@ -1,7 +1,7 @@
 <!-- now this is what i call web dev -->
 <hr>
 <h3>Results</h3>
-<p id="codeResults">Results will be displayed here.</p>
+<ul id="codeResults">Results will be displayed here.</ul>
 <hr>
 <h3>Editor</h3>
 
@@ -97,7 +97,14 @@ $(document).ready(function() {
 
     // Get results
     socket.on("code results", function(results) {
-        $("#codeResults").text(results);
+        $("#codeResults").empty();
+        results.forEach(function(val, index, array) {
+            if(val) {
+                $("#codeResults").append('<li style="color: green; font-weight: bolder; font-size: 15px;">Testcase ' + (index + 1) + ': Pass</li>');
+            } else {
+                $("#codeResults").append('<li style="color: red; font-weight: bolder; font-size: 15px;">Testcase ' + (index + 1) + ': Fail</li>');
+            }
+        });
     });
 });
 
