@@ -36,14 +36,31 @@
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script src="/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
-    
-var codes, names;
+    var codes, names;
 
 // Setup the editor
 var editor = ace.edit("editor");
 var lang = "";
 editor.setTheme("ace/theme/monokai");
 editor.setValue("Select your language from the dropdown box above");
+
+function sortObject(obj) {
+    var sorted = {},
+    key, arr = [];
+
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            arr.push(key);
+        }
+    }
+
+    arr.sort();
+
+    for (key = 0; key < arr.length; key++) {
+        sorted[arr[key]] = obj[arr[key]];
+    }
+    return sorted;
+}
 
 $(document).ready(function() {
     
@@ -65,6 +82,8 @@ $(document).ready(function() {
     socket.on("languages", function(languagesIn) {
         // Store languages
         var languages = languagesIn.languages.names;
+        
+        languages = sortObject(languages);
 
         // Store codes
         var codes = [];
