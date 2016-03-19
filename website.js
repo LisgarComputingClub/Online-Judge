@@ -30,6 +30,7 @@ server = express();
 // Store port
 var port;
 
+// Check if a port was specified
 if (process.argv.length > 2) {
     process.argv.forEach(function (val, index, array) {
         switch(true) {
@@ -43,27 +44,33 @@ if (process.argv.length > 2) {
     });
 }
 
+// Start Socket.io
 var io = require("socket.io").listen(server.listen(port));
-exports.io = io;
 
+// Export Socket.io and web server
+exports.io = io;
 exports.server = server;
 
+// Setup webserver
 exports.server.set('view engine', 'ejs');
 
+// Root directory
 exports.server.use('/', express.static(__dirname + '/'));
 
+// Homepage
 exports.server.get('/', function(req, res) {
     res.render('pages/index', { title: "LCI Online Judge" });
 });
-
 exports.server.get('/index', function(req, res) {
     res.render('pages/index', { title: "LCI Online Judge" });
 });
 
+// Login page
 exports.server.get('/login', function(req, res) {
     res.render('pages/login', { title: "Log In" });
 });
 
+// Login script
 exports.server.post('/login_verify', urlencodedParser, function(req, res) {
     // Connect to MongoDB and lookup username
     MongoClient.connect(url, function(err, db) {
@@ -88,38 +95,47 @@ exports.server.post('/login_verify', urlencodedParser, function(req, res) {
     });
 });
 
+// Signin page
 exports.server.get('/signin', function(req, res) {
     res.render('pages/signin', { title: "LCI Online Judge" });
 });
 
+// Profile page
 exports.server.get('/profile', function(req, res) {
     res.render('pages/profile', { title: "Profile" });
 });
 
+// Users page
 exports.server.get('/users', function(req, res) {
     res.render('pages/users', { title: "Users" });
 });
 
+// Contests page
 exports.server.get('/contests', function(req, res) {
     res.render('pages/contests', { title: "Contests" });
 });
 
+// Problems page
 exports.server.get('/problems', function(req, res) {
     getProblem(req, res);
 });
 
+// About page
 exports.server.get('/about', function(req, res) {
     res.render('pages/about', { title: "About" });
 });
 
+// Organizations page
 exports.server.get('/organizations', function(req, res) {
     res.render('pages/organizations', { title: "Organizations" });
 });
 
+// Individual problems
 exports.server.get(/\/problems\//, function(req, res) {
     res.render('pages/problems/' + req.url.substr(10), { title: req.url.substr(10) });
 });
 
+// Socket.io
 exports.io.sockets.on("connection", function(socket) {
     console.log("Connect");
     socket.on("code submission", function(data) {
@@ -153,6 +169,7 @@ function getProblem(req, res) {
     }
 }
 
+// Check if a problem exists
 function problemExists(code, callback) {
     exists.exists('views/pages/problems/' + code + '.ejs', callback);
 }
