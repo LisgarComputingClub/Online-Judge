@@ -143,13 +143,26 @@ exports.server.get(/\/problems\//, function(req, res) {
 
 // Socket.io
 exports.io.sockets.on("connection", function(socket) {
+    // A user connected
     console.log("Connect");
+    
+    // A user is requesting languages
+    socket.on("languages request", function() {
+        socket.join("languages");
+        io.to("languages").emit("languages", languages);
+        socket.leave("languages");
+    });
+    
+    // A user submitted code
     socket.on("code submission", function(data) {
         // Validate code
         data = JSON.parse(data);
         HackerRank.evaluateCode(data.code, data.lang, ["1", "2", "3"], ["1\n", "1\n", "1\n"], function(results) {
+            // Add socket to result room so only they get results
             socket.join("result");
+            // Send the results
             io.to("result").emit("code results", results);
+            // Remove the socket from the room
             socket.leave("result");
         });
     });

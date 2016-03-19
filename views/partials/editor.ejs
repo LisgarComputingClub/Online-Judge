@@ -83,6 +83,14 @@
         editor.getSession().setMode("ace/mode/ruby");
       });
       
+      // Request languages
+      socket.emit("languages request");
+      
+      // Receive languages
+      socket.on("languages", function(languages) {
+          // Do something with languages
+      });
+      
       // Submit button pressed
       $("#submit").click(function() {
         // Turn data into a JSON string
