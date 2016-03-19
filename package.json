@@ -24,6 +24,7 @@
     "easy-table": "^1.0.0",
     "ejs": "~2.4.1",
     "express": "~4.13.4",
+    "ip": "^1.1.2",
     "machinepack-hackerrank": "^0.1.2",
     "mongodb": "^2.1.7",
     "nodemon": "^1.9.1",
