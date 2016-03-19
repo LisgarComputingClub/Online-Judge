@@ -4,6 +4,9 @@
 var http = require('http');
 var express = require('express');
 
+// IP address tools
+var ip = require("ip");
+
 // MongoDB
 var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
@@ -24,6 +27,7 @@ var url = 'mongodb://localhost:27017/ONLINE_JUDGE';
 // Start and configure web server
 server = express();
 
+// Store port
 var port;
 
 if (process.argv.length > 2) {
@@ -137,7 +141,7 @@ function getProblem(req, res) {
         problemExists(req.query.problem, function(data) {
             if (data) {
                 // Problem exists, give it to the user
-                res.render('pages/problems/' + req.query.problem + '.ejs', { title: "Problems", port: port });
+                res.render('pages/problems/' + req.query.problem + '.ejs', { title: "Problems", ip: ip.address(), port: port });
             } else {
                 // Problem doesn't exist, give them the list of problems
                 res.render('pages/problems', { title: "Problems" });

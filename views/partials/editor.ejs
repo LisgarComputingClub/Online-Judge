@@ -47,7 +47,7 @@
         editor.getSession().setMode("ace/mode/c_cpp");
     });
     <!-- Socket.io -->
-    var socket = io.connect('http://localhost:<%= port %>');
+    var socket = io.connect('http://<%= ip %>:<%= port %>');
     
     <!-- Editor -->
     var editor = ace.edit("editor");
