@@ -40,16 +40,18 @@
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script src="/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
+    // Set default language
     $(document).ready(function() {
         editor.setValue("//Read input from STDIN, output to STDOUT");
         $(".dropdown-toggle").html("C <span class=\"caret\"></span>");
         lang = "c";
         editor.getSession().setMode("ace/mode/c_cpp");
     });
-    <!-- Socket.io -->
+    
+    // Connect Socket.io to the server
     var socket = io.connect('http://<%= ip %>:<%= port %>');
     
-    <!-- Editor -->
+    // Setup the editor
     var editor = ace.edit("editor");
     var lang = "";
     editor.setTheme("ace/theme/monokai");
