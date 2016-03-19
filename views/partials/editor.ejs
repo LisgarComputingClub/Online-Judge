@@ -94,9 +94,6 @@
         
         // Send JSON string to server over Socket.io
         socket.emit("code submission", data);
-        $.post("/views/pages/submit", {jsonString: data}, function(result) {
-          alert(result);
-        });
         
         // Get results
         socket.on("code results", function(results) {
