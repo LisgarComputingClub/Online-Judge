@@ -25,7 +25,7 @@ var exists = require("simple-exist");
 var HackerRank = require("./js/submit.js");
 
 // MongoDB
-var url = 'mongodb://localhost:27017/ONLINE_JUDGE';
+var url = 'mongodb://159.203.47.121:27017/ONLINE_JUDGE';
 
 // Start and configure web server
 server = express();
