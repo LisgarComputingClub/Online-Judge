@@ -25,7 +25,7 @@ var exists = require("simple-exist");
 var HackerRank = require("./js/submit.js");
 
 // MongoDB
-var url = 'mongodb://159.203.47.121:27017/ONLINE_JUDGE';
+var url = 'mongodb://localhost:27017/ONLINE_JUDGE';
 
 // Start and configure web server
 server = express();
@@ -163,7 +163,7 @@ exports.io.sockets.on("connection", function(socket) {
         data = JSON.parse(data);
         
         MongoClient.connect(url, function(err, db) {
-            var problem = db.collection('problems').findOne({'pid':data.pid});
+            var problem = db.collection('problems').findOne({'pid':data.problem});
 
             HackerRank.evaluateCode(data.code, data.lang, problem.input, problem.output, function(results) {
                 // Add socket to result room so only they get results
