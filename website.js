@@ -161,16 +161,18 @@ exports.io.sockets.on("connection", function(socket) {
     socket.on("code submission", function(data) {
         // Validate code
         data = JSON.parse(data);
+        
+        MongoClient.connect(url, function(err, db) {
+            var problem = db.collection('problems').findOne({'pid':data.pid});
 
-        var problem = db.collection('problems').findOne({'pid':data.pid});
-
-        HackerRank.evaluateCode(data.code, data.lang, problem.input, problem.output, function(results) {
-            // Add socket to result room so only they get results
-            socket.join("result");
-            // Send the results
-            io.to("result").emit("code results", results);
-            // Remove the socket from the room
-            socket.leave("result");
+            HackerRank.evaluateCode(data.code, data.lang, problem.input, problem.output, function(results) {
+                // Add socket to result room so only they get results
+                socket.join("result");
+                // Send the results
+                io.to("result").emit("code results", results);
+                // Remove the socket from the room
+                socket.leave("result");
+            });
         });
     });
 });
