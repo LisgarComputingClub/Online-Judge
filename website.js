@@ -25,7 +25,7 @@ var exists = require("simple-exist");
 var HackerRank = require("./js/submit.js");
 
 // MongoDB
-var url = 'mongodb://localhost:27017/ONLINE_JUDGE';
+var url = 'mongodb://159.203.47.121:27017/ONLINE_JUDGE';
 
 // Start and configure web server
 server = express();
@@ -138,7 +138,11 @@ exports.server.get('/organizations', function(req, res) {
 
 // Individual problems
 exports.server.get(/\/problems\//, function(req, res) {
-    res.render('pages/problems/' + req.url.substr(10), { title: req.url.substr(10) });
+    var pid = req.url.substr(10);
+    MongoClient.connect(url, function(err, db) {
+        var problem = db.collection('problems').findOne({'pid':pid});
+        res.render('pages/problems/' + req.url.substr(10), problem);    
+    });    
 });
 
 // Socket.io
@@ -157,13 +161,19 @@ exports.io.sockets.on("connection", function(socket) {
     socket.on("code submission", function(data) {
         // Validate code
         data = JSON.parse(data);
-        HackerRank.evaluateCode(data.code, data.lang, ["1", "2", "3"], ["1\n", "1\n", "1\n"], function(results) {
-            // Add socket to result room so only they get results
-            socket.join("result");
-            // Send the results
-            io.to("result").emit("code results", results);
-            // Remove the socket from the room
-            socket.leave("result");
+        
+        MongoClient.connect(url, function(err, db) {
+            db.collection('problems').findOne({'pid':data.problem}, function(err, problem) {
+                console.log(problem);
+                HackerRank.evaluateCode(data.code, data.lang, problem.input, problem.output, function(results) {
+                    // Add socket to result room so only they get results
+                    socket.join("result");
+                    // Send the results
+                    io.to("result").emit("code results", results);
+                    // Remove the socket from the room
+                    socket.leave("result");
+                });
+            });
         });
     });
 });

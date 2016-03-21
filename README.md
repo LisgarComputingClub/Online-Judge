@@ -1,5 +1,3 @@
-# This branch is for integrating a new theme.
-
 ## Lisgar Collegiate Institute Online Judge
 
 This is a project started by the 2015-2016 Lisgar Computing Club (LCC) heads. The aim of this project is to create an online judge specific to the LCC, to be used for computer science classes, as well as in preparation for contests such as the CCC and the ECOO.

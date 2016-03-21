@@ -1,5 +1,5 @@
 var editor = ace.edit(editor);
-editor.setTheme("/js/ace/theme/monokai");
+editor.setTheme("/js/ace/theme/github");
 editor.getSession().setMode("/js/ace/mode/c");
 $(function() {
 	$('.dropdown-toggle').dropdown();
