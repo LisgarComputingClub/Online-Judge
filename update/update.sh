@@ -5,3 +5,6 @@
 # Pull latest from Github repo
 echo "Pulling latest version of the online judge..."
 git pull
+
+# Install latest dependencies
+sudo npm install
