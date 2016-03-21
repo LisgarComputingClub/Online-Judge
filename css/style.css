@@ -41,6 +41,18 @@ h5 {
     color: green;
 }
 
+/* Although these classes are identical,
+   they'll be different when more
+   features are implemented.
+*/
 .result-fail {
+    color: red;
+}
+
+.result-error {
+    color: red;
+}
+
+.result-unexpected {
     color: red;
 }

@@ -22,13 +22,19 @@ module.exports.evaluateCode = function(code, language, testcases, answers, callb
         },
         // Code compiled successfully
         success: function(response) {
-            JSON.parse(response).result.stdout.forEach(function(val, index, array) {
-                if(val == answers[index]) {
-                    results.push(true);
+            response = JSON.parse(response).result;
+            response.stderr.forEach(function(val, index, array) {
+                if (val === false) {
+                    if (response.stdout[index] == answers[index]) {
+                        results.push(true);
+                    } else {
+                        results.push(false);
+                    }
                 } else {
-                    results.push(false);
+                    results.push("error");
                 }
             });
+            console.log("Results: " + results);
             callback(results);
         }
     });
@@ -52,7 +58,7 @@ module.exports.evaluateFile = function(file, language, testcases, answers, callb
         // Code compiled successfully
         success: function(response) {
             JSON.parse(response).result.stdout.forEach(function(val, index, array) {
-                if(val == answers[index]) {
+                if (val == answers[index]) {
                     results.push(true);
                 } else {
                     results.push(false);
