@@ -145,12 +145,6 @@ exports.server.get(/\/problems\//, function(req, res) {
     });    
 });
 
-//ty stack overflow
-function sleepFor( sleepDuration ){
-    var now = new Date().getTime();
-    while(new Date().getTime() < now + sleepDuration){ /* do nothing */ } 
-}
-
 // Socket.io
 exports.io.sockets.on("connection", function(socket) {
     // A user connected
@@ -169,16 +163,16 @@ exports.io.sockets.on("connection", function(socket) {
         data = JSON.parse(data);
         
         MongoClient.connect(url, function(err, db) {
-            var problem = db.collection('problems').findOne({'pid':data.problem});
-            sleepFor(500);
-            console.log(problem);
-            HackerRank.evaluateCode(data.code, data.lang, problem.input, problem.output, function(results) {
-                // Add socket to result room so only they get results
-                socket.join("result");
-                // Send the results
-                io.to("result").emit("code results", results);
-                // Remove the socket from the room
-                socket.leave("result");
+            db.collection('problems').findOne({'pid':data.problem}, function(err, problem) {
+                console.log(problem);
+                HackerRank.evaluateCode(data.code, data.lang, problem.input, problem.output, function(results) {
+                    // Add socket to result room so only they get results
+                    socket.join("result");
+                    // Send the results
+                    io.to("result").emit("code results", results);
+                    // Remove the socket from the room
+                    socket.leave("result");
+                });
             });
         });
     });
