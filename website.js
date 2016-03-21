@@ -164,7 +164,7 @@ exports.io.sockets.on("connection", function(socket) {
         
         MongoClient.connect(url, function(err, db) {
             var problem = db.collection('problems').findOne({'pid':data.problem});
-
+            console.log(problem);
             HackerRank.evaluateCode(data.code, data.lang, problem.input, problem.output, function(results) {
                 // Add socket to result room so only they get results
                 socket.join("result");
