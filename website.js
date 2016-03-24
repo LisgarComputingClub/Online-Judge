@@ -33,8 +33,8 @@ server = express();
 // Store languages.json
 var languages = JSON.parse(fs.readFileSync("languages.json", "utf8"));
 
-// Store port (defaults to 8080)
-var port = 8080;
+// Store port
+var port;
 
 var passport = require("passport");
 
@@ -65,6 +65,8 @@ if (process.argv.length > 2) {
                 var temp = val.split("=");
                 port = Number(temp[1]);
                 break;
+            default:
+                port = 8080;
         }
     });
 }
@@ -83,7 +85,11 @@ exports.server.set('view engine', 'ejs');
 exports.server.use('/', express.static(__dirname + '/'));
 
 
-exports.server.post('/login_verify')
+exports.server.post('/login_verify', 
+    passport.authenticate('local', { successRedirect: '/',
+                                     failureRedirect: '/login',
+                                     failureFlash: true })
+);
 // Homepage
 exports.server.get('/', function(req, res) {
     res.render('pages/index', { title: "LCI Online Judge" });
@@ -136,35 +142,31 @@ exports.server.get('/organizations', function(req, res) {
 exports.server.get(/\/problems\//, function(req, res) {
     var pid = req.url.substr(10);
     MongoClient.connect(url, function(err, db) {
-        var problem = db.collection('problems').findOne({ 'pid': pid });
-        res.render('pages/problems/' + req.url.substr(10), problem);
-    });
+        var problem = db.collection('problems').findOne({'pid':pid});
+        res.render('pages/problems/' + req.url.substr(10), problem);    
+    });    
 });
 
 // Socket.io
 exports.io.sockets.on("connection", function(socket) {
     // A user connected
     console.log("Connect");
-
+    
     // A user is requesting languages
     socket.on("languages request", function() {
         socket.join("languages");
         io.to("languages").emit("languages", languages);
         socket.leave("languages");
     });
-
+    
     // A user submitted code
     socket.on("code submission", function(data) {
         // Validate code
         data = JSON.parse(data);
-
+        
         MongoClient.connect(url, function(err, db) {
-<<<<<<< HEAD
             db.collection('problems').findOne({'pid':data.problem}, function(err, problem) {
                 console.log(data.problem);
-=======
-            db.collection('problems').findOne({ 'pid': data.problem }, function(err, problem) {
->>>>>>> origin/master
                 console.log(problem);
                 HackerRank.evaluateCode(data.code, data.lang, problem.input, problem.output, function(results) {
                     // Add socket to result room so only they get results
@@ -207,7 +209,7 @@ function problemExists(code, callback) {
 // Update languages.json
 module.exports.updateLanguages = function() {
     fs.readFile("languages.json", "utf8", function(err, data) {
-        if (err) {
+        if(err) {
             throw err;
         }
         languages = JSON.parse(data);
