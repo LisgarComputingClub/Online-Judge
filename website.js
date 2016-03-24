@@ -36,6 +36,27 @@ var languages = JSON.parse(fs.readFileSync("languages.json", "utf8"));
 // Store port
 var port;
 
+var passport = require("passport");
+
+var LocalStrategy = require("passport-local").Strategy;
+
+passport.use(new LocalStrategy(
+    function(username, password, done) {
+        User.findOne({ username: username }, function(err, user) {
+            if (err) {
+                return done(err);
+            }
+            if (!user) {
+                return done(null, false, { message: 'Incorrect username.' });
+            }
+            if (!user.validPassword(password)) {
+                return done(null, false, { message: 'Incorrect password.' });   
+            }
+            return done(null, user);
+        });
+    }
+));
+
 // Check if a port was specified
 if (process.argv.length > 2) {
     process.argv.forEach(function (val, index, array) {
@@ -63,6 +84,8 @@ exports.server.set('view engine', 'ejs');
 // Root directory
 exports.server.use('/', express.static(__dirname + '/'));
 
+
+exports.server.post('/login_verify')
 // Homepage
 exports.server.get('/', function(req, res) {
     res.render('pages/index', { title: "LCI Online Judge" });
@@ -74,31 +97,6 @@ exports.server.get('/index', function(req, res) {
 // Login page
 exports.server.get('/login', function(req, res) {
     res.render('pages/login', { title: "Log In" });
-});
-
-// Login script
-exports.server.post('/login_verify', urlencodedParser, function(req, res) {
-    // Connect to MongoDB and lookup username
-    MongoClient.connect(url, function(err, db) {
-        var cursor = db.collection('users').find({ 'username': req.body.username });
-        if (cursor.size === 0)
-            throw "No user with that username found";
-        else {
-            var logged_in = false;
-            cursor.each(function(err, doc) {
-                console.log(doc);
-                if (doc !== null) {
-                    //todo: actual crypto lol
-                    if (doc.password == req.body.password) {
-                        logged_in = true;
-                        //todo: actual logins lol
-                    }
-                }
-            });
-            if (!logged_in)
-                throw "Incorrect password";
-        }
-    });
 });
 
 // Signin page
@@ -164,6 +162,7 @@ exports.io.sockets.on("connection", function(socket) {
         
         MongoClient.connect(url, function(err, db) {
             db.collection('problems').findOne({'pid':data.problem}, function(err, problem) {
+                console.log(data.problem);
                 console.log(problem);
                 HackerRank.evaluateCode(data.code, data.lang, problem.input, problem.output, function(results) {
                     // Add socket to result room so only they get results
