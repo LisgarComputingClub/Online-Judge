@@ -20,7 +20,7 @@
 <br/>
 <div class="container">
     <div class="col-md-8"></div>
-    <button type="button" class="btn btn-default" id="submit">Submit</button>
+    <button type="button" class="btn btn-success" id="submit-button">Submit</button>
 </div>
 
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
@@ -108,11 +108,27 @@ $(document).ready(function() {
     socket.on("code results", function(results) {
         $("#codeResults").empty();
         results.forEach(function(val, index, array) {
-            if(val) {
-                $("#codeResults").append('<li class="result result-pass">Testcase ' + (index + 1) + ': Pass</li>');
-            } else {
-                $("#codeResults").append('<li class="result result-fail">Testcase ' + (index + 1) + ': Fail</li>');
+            
+            // Check what result your code got
+            switch(val) {
+                case "error":
+                    // Compile error
+                    $("#codeResults").append('<li class="result result-error">Testcase ' + (index + 1) + ': Compile error</li>');
+                    break;
+                case true:
+                    // Pass
+                    $("#codeResults").append('<li class="result result-pass">Testcase ' + (index + 1) + ': Pass</li>');
+                    break;
+                case false:
+                    // Failed
+                    $("#codeResults").append('<li class="result result-fail">Testcase ' + (index + 1) + ': Fail</li>');
+                    break;
+                default:
+                    // Unexpected error
+                    $("#codeResults").append('<li class="result result-unexpected">Testcase ' + (index + 1) + ': An unexpected error occurred. Please contact the admins.</li>');
+                    break;
             }
+            
         });
     });
 });

@@ -4,7 +4,7 @@
   "description": "LCI Online Judge",
   "main": "main.js",
   "scripts": {
-    "test": "no thanks",
+    "test": "node npmtest",
     "start": "node main.js"
   },
   "repository": {
