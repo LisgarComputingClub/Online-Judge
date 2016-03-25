@@ -24,6 +24,9 @@ var exists = require("simple-exist");
 // Validate code submissions
 var HackerRank = require("./js/submit.js");
 
+// Passport for user authentication
+var passport = require("passport");
+
 // MongoDB
 var url = 'mongodb://159.203.47.121:27017/ONLINE_JUDGE';
 
@@ -36,7 +39,7 @@ var languages = JSON.parse(fs.readFileSync("languages.json", "utf8"));
 // Store port
 var port;
 
-var passport = require("passport");
+
 
 var LocalStrategy = require("passport-local").Strategy;
 
