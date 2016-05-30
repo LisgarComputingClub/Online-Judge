@@ -28,7 +28,7 @@ var HackerRank = require("./js/submit.js");
 var passport = require("passport");
 
 // MongoDB
-var url = 'mongodb://159.203.47.121:27017/ONLINE_JUDGE';
+var url = 'mongodb://159.203.30.87:27017/ONLINE_JUDGE';
 
 // Start and configure web server
 server = express();
