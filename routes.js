@@ -1,4 +1,4 @@
-module.exports = function(server, MongoClient, passport) {
+module.exports = function(server, MongoClient, passport, exists) {
     server.post('/login_verify', 
         passport.authenticate('local', { successRedirect: '/',
                                          failureRedirect: '/login',
@@ -61,4 +61,29 @@ module.exports = function(server, MongoClient, passport) {
             res.render('pages/problems/' + req.url.substr(10), problem);    
         });    
     });
+
+    // Decide which problem to serve to the user
+    function getProblem(req, res) {
+        // Check if the GET paramater "problem" was specified
+        if (req.query.hasOwnProperty("problem")) {
+            // It was, check if that problem exists
+            problemExists(req.query.problem, function(data) {
+                if (data) {
+                    // Problem exists, give it to the user
+                    res.render('pages/problems/' + req.query.problem + '.ejs', { title: "Problems", ip: ip.address(), port: port });
+                } else {
+                    // Problem doesn't exist, give them the list of problems
+                    res.render('pages/problems', { title: "Problems" });
+                }
+            });
+        } else {
+            // It wasn't, take user to the list of problems
+            res.render('pages/problems', { title: "Problems" });
+        }
+    }
+
+    // Check if a problem exists
+    function problemExists(code, callback) {
+        exists.exists('views/pages/problems/' + code + '.ejs', callback);
+    }
 }

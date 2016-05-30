@@ -60,7 +60,7 @@ passport.use(new LocalStrategy(
 ));
 
 
-var routes = require('./routes')(server, MongoClient, passport);
+var routes = require('./routes')(server, MongoClient, passport, exists);
 
 // Check if a port was specified
 if (process.argv.length > 2) {
@@ -122,31 +122,6 @@ exports.io.sockets.on("connection", function(socket) {
         });
     });
 });
-
-// Decide which problem to serve to the user
-function getProblem(req, res) {
-    // Check if the GET paramater "problem" was specified
-    if (req.query.hasOwnProperty("problem")) {
-        // It was, check if that problem exists
-        problemExists(req.query.problem, function(data) {
-            if (data) {
-                // Problem exists, give it to the user
-                res.render('pages/problems/' + req.query.problem + '.ejs', { title: "Problems", ip: ip.address(), port: port });
-            } else {
-                // Problem doesn't exist, give them the list of problems
-                res.render('pages/problems', { title: "Problems" });
-            }
-        });
-    } else {
-        // It wasn't, take user to the list of problems
-        res.render('pages/problems', { title: "Problems" });
-    }
-}
-
-// Check if a problem exists
-function problemExists(code, callback) {
-    exists.exists('views/pages/problems/' + code + '.ejs', callback);
-}
 
 // Update languages.json
 module.exports.updateLanguages = function() {
