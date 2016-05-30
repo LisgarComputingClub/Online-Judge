@@ -39,7 +39,6 @@ var languages = JSON.parse(fs.readFileSync("languages.json", "utf8"));
 // Store port
 var port;
 
-var routes = require('./routes')(server, MongoClient);
 
 var LocalStrategy = require("passport-local").Strategy;
 
@@ -59,6 +58,9 @@ passport.use(new LocalStrategy(
         });
     }
 ));
+
+
+var routes = require('./routes')(server, MongoClient, passport);
 
 // Check if a port was specified
 if (process.argv.length > 2) {

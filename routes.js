@@ -1,4 +1,4 @@
-module.exports = function(server, db) {
+module.exports = function(server, MongoClient, passport) {
     server.post('/login_verify', 
         passport.authenticate('local', { successRedirect: '/',
                                          failureRedirect: '/login',
