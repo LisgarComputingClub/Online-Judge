@@ -39,7 +39,7 @@ var languages = JSON.parse(fs.readFileSync("languages.json", "utf8"));
 // Store port
 var port;
 
-
+var routes = require('./routes')(server, db);
 
 var LocalStrategy = require("passport-local").Strategy;
 
@@ -86,69 +86,6 @@ exports.server.set('view engine', 'ejs');
 
 // Root directory
 exports.server.use('/', express.static(__dirname + '/'));
-
-
-exports.server.post('/login_verify', 
-    passport.authenticate('local', { successRedirect: '/',
-                                     failureRedirect: '/login',
-                                     failureFlash: true })
-);
-// Homepage
-exports.server.get('/', function(req, res) {
-    res.render('pages/index', { title: "LCI Online Judge" });
-});
-exports.server.get('/index', function(req, res) {
-    res.render('pages/index', { title: "LCI Online Judge" });
-});
-
-// Login page
-exports.server.get('/login', function(req, res) {
-    res.render('pages/login', { title: "Log In" });
-});
-
-// Signin page
-exports.server.get('/signin', function(req, res) {
-    res.render('pages/signin', { title: "LCI Online Judge" });
-});
-
-// Profile page
-exports.server.get('/profile', function(req, res) {
-    res.render('pages/profile', { title: "Profile" });
-});
-
-// Users page
-exports.server.get('/users', function(req, res) {
-    res.render('pages/users', { title: "Users" });
-});
-
-// Contests page
-exports.server.get('/contests', function(req, res) {
-    res.render('pages/contests', { title: "Contests" });
-});
-
-// Problems page
-exports.server.get('/problems', function(req, res) {
-    getProblem(req, res);
-});
-
-// About page
-exports.server.get('/about', function(req, res) {
-    res.render('pages/about', { title: "About" });
-});
-
-// Organizations page
-exports.server.get('/organizations', function(req, res) {
-    res.render('pages/organizations', { title: "Organizations" });
-});
-
-// Individual problems
-exports.server.get(/\/problems\//, function(req, res) {
-    var pid = req.url.substr(10);
-    MongoClient.connect(url, function(err, db) {
-        var problem = db.collection('problems').findOne({'pid':pid});
-        res.render('pages/problems/' + req.url.substr(10), problem);    
-    });    
-});
 
 // Socket.io
 exports.io.sockets.on("connection", function(socket) {
