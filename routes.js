@@ -1,3 +1,39 @@
+// Filesystem access
+var fs = require("fs");
+
+// Website hosting
+var http = require('http');
+var express = require('express');
+
+// IP address tools
+var ip = require("ip");
+
+// MongoDB
+var MongoClient = require('mongodb').MongoClient;
+var ObjectID = require('mongodb').ObjectID;
+
+// Website
+var bodyParser = require('body-parser');
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
+
+// Simple file exist checking
+var exists = require("simple-exist");
+
+// Validate code submissions
+var HackerRank = require("./js/submit.js");
+
+// Passport for user authentication
+var passport = require("passport");
+
+// MongoDB
+var url = 'mongodb://159.203.30.87:27017/ONLINE_JUDGE';
+
+// Start and configure web server
+server = express();
+
+// Store languages.json
+var languages = JSON.parse(fs.readFileSync("languages.json", "utf8"));
+
 module.exports = function(server, MongoClient, passport, exists) {
     server.post('/login_verify', 
         passport.authenticate('local', { successRedirect: '/',
