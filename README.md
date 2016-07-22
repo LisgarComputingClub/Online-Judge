@@ -24,10 +24,4 @@ The install script code can be found [here](https://github.com/LisgarComputingCl
     
 ### How it Works
 
-<<<<<<< ddbfb33e064d6d057c1c90b4d7cc4dac00dd01f1
 The server is written in Node.js, with Express for the web server, TingoDB for the database, Bootstrap for the front end, EJS as the view engine, Passport for authentication, Socket.io for communication inbetween the server and browser, and Hackerrank to run code. Users will be able to login, solve and create problems.
-=======
-The general idea behind it is as follows: TingoDB on top of Node.js/express with Bootstrap to provide a responsive, fast, and beautiful judge. Users will be able to log in, and solve problems uploaded by administrators. Checking will be done server side, likely in C++.
-
-The installation script runs the command located [here](https://gist.github.com/Porso7/1dea6140143961a3c762) to install the judge dependencies.
->>>>>>> 887d66a0d59586b140f0a40528e428836cb5f3e5
