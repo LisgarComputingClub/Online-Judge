@@ -8,10 +8,6 @@ var express = require('express');
 // IP address tools
 var ip = require("ip");
 
-// MongoDB
-var MongoClient = require('mongodb').MongoClient;
-var ObjectID = require('mongodb').ObjectID;
-
 // Website
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -25,16 +21,13 @@ var HackerRank = require("./js/submit.js");
 // Passport for user authentication
 var passport = require("passport");
 
-// MongoDB
-var url = 'mongodb://159.203.30.87:27017/ONLINE_JUDGE';
-
 // Start and configure web server
 server = express();
 
 // Store languages.json
 var languages = JSON.parse(fs.readFileSync("languages.json", "utf8"));
 
-module.exports = function(server, MongoClient, passport, exists) {
+module.exports = function(server, passport, exists, port) {
     server.post('/login_verify', 
         passport.authenticate('local', { successRedirect: '/',
                                          failureRedirect: '/login',
@@ -92,10 +85,6 @@ module.exports = function(server, MongoClient, passport, exists) {
     // Individual problems
     server.get(/\/problems\//, function(req, res) {
         var pid = req.url.substr(10);
-        MongoClient.connect(url, function(err, db) {
-            var problem = db.collection('problems').findOne({'pid':pid});
-            res.render('pages/problems/' + req.url.substr(10), problem);    
-        });    
     });
 
     // Decide which problem to serve to the user
@@ -106,6 +95,7 @@ module.exports = function(server, MongoClient, passport, exists) {
             problemExists(req.query.problem, function(data) {
                 if (data) {
                     // Problem exists, give it to the user
+                    // TODO: fix IP address bug
                     res.render('pages/problems/' + req.query.problem + '.ejs', { title: "Problems", ip: ip.address(), port: port });
                 } else {
                     // Problem doesn't exist, give them the list of problems

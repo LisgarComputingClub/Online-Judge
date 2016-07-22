@@ -10,10 +10,6 @@ var express = require('express');
 // IP address tools
 var ip = require("ip");
 
-// MongoDB
-var MongoClient = require('mongodb').MongoClient;
-var ObjectID = require('mongodb').ObjectID;
-
 // Website
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -26,9 +22,6 @@ var HackerRank = require("./js/submit.js");
 
 // Passport for user authentication
 var passport = require("passport");
-
-// MongoDB
-var url = 'mongodb://159.203.30.87:27017/ONLINE_JUDGE';
 
 // Start and configure web server
 server = express();
@@ -59,9 +52,6 @@ passport.use(new LocalStrategy(
     }
 ));
 
-
-var routes = require('./routes')(server, MongoClient, passport, exists);
-
 // Check if a port was specified
 if (process.argv.length > 2) {
     process.argv.forEach(function (val, index, array) {
@@ -75,6 +65,8 @@ if (process.argv.length > 2) {
         }
     });
 }
+
+var routes = require('./routes')(server, passport, exists, port);
 
 // Start Socket.io
 var io = require("socket.io").listen(server.listen(port));
@@ -103,10 +95,11 @@ exports.io.sockets.on("connection", function(socket) {
     
     // A user submitted code
     socket.on("code submission", function(data) {
+        console.log("things");
         // Validate code
         data = JSON.parse(data);
         
-        MongoClient.connect(url, function(err, db) {
+        /*MongoClient.connect(url, function(err, db) {
             db.collection('problems').findOne({'pid':data.problem}, function(err, problem) {
                 console.log(data.problem);
                 console.log(problem);
@@ -119,7 +112,7 @@ exports.io.sockets.on("connection", function(socket) {
                     socket.leave("result");
                 });
             });
-        });
+        });*/
     });
 });
 
