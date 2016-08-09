@@ -24,18 +24,22 @@ socket.on("submission-status", function(data) {
 // Display code results
 socket.on("submission-results", function(data) {
 
+    // Create the list of results
     $("div.modal-body").append('<ul id="results-list">');
 
+    // Add results to the list
     data.forEach(function(val, index, arr) {
-        if(index) {
+        if(val) {
             $("#results-list").append('<li class="result-correct">Correct</li>');
         } else {
             $("#results-list").append('<li class="result-wrong">Wrong</li>');
         }
     });
 
+    // End the list
     $("div.modal-body").append("</ul>");
 
+    // Add a close button
     $("div.modal-content").append('<div id="result-footer" class="modal-footer"><button id="results-button" type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>');
 });
 
@@ -139,11 +143,12 @@ $("#submit-button").click(function() {
     socket.emit("code-submission", code);
 });
 
-// Close results
+// Fires when the results modal closes
 $('#result-modal').on("hidden.bs.modal", function(event) {
-    $("#result-footer").remove();
-    $("#results-list").remove();
+    // Clear the results modal
     $("#submission-status").text("Sending code to server...");
+    $("#results-list").remove();
+    $("#result-footer").remove();
 });
 
 // Functions
