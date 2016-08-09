@@ -21,7 +21,9 @@ socket.on("submission-status", function(data) {
     }
 });
 
+// Display code results
 socket.on("submission-results", function(data) {
+
     $("div.modal-body").append('<ul id="results-list">');
 
     data.forEach(function(val, index, arr) {
@@ -34,7 +36,7 @@ socket.on("submission-results", function(data) {
 
     $("div.modal-body").append("</ul>");
 
-    $("div.modal-content").append('<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>');
+    $("div.modal-content").append('<div id="result-footer" class="modal-footer"><button id="results-button" type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>');
 });
 
 // Get the problem data
@@ -135,6 +137,13 @@ $("#submit-button").click(function() {
 
     // Send the submission to the server
     socket.emit("code-submission", code);
+});
+
+// Close results
+$('#result-modal').on("hidden.bs.modal", function(event) {
+    $("#result-footer").remove();
+    $("#results-list").remove();
+    $("#submission-status").text("Sending code to server...");
 });
 
 // Functions
