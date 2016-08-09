@@ -14,7 +14,8 @@ var problemSchema = mongoose.Schema({
     languages: [String],
     testcases: {
         input: [String],
-        output: [String]
+        output: [String],
+        points: [Number]
     }
 });
 
