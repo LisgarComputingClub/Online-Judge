@@ -5,6 +5,7 @@ socket.on("connect", function() {
 
 // Get the profile data
 socket.on("profile-response", function(data) {
+    console.log(data);
     // Fill in the profile info
     $("#profile-name").text(data.name);
     $("#profile-points").text(data.grader.points + " points")
@@ -27,5 +28,15 @@ socket.on("profile-response", function(data) {
         $("#profile-bio").text(data.grader.bio);
     } else {
         $("#profile-bio").text("not set");
+    }
+    $("#solved-problems-header").append('   <span class="badge">' + data.grader.problemsSolved.length + '</span>');
+    if(data.grader.problemsSolved.length > 0) {
+        $("#solved-problems").append('<ul id="solved-problems-list">')
+        data.grader.problemsSolved.forEach(function(val, index, arr) {
+            $("#solved-problems-list").append("<li>" + val + "</li>");
+        });
+        $("#solved-problems").append("</ul>");
+    } else {
+        $("#solved-problems").append('<p class="info">This user hasn\'t solved any problems.');
     }
 });
