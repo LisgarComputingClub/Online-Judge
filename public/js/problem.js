@@ -80,7 +80,7 @@ socket.on("problem-response", function (problem) {
     curLang = dropdown[0];
 
     // Set the editor language
-    editor.getSession().setMode("ace/mode/" + (dropdown[0].lang == "c" || dropdown[0].lang == "cpp") ? "c_cpp" : dropdown[0].lang);
+    editor.getSession().setMode("ace/mode/" + dropdown[0].lang);
 
     // Set the dropdown button text
     $("#lang-button").html(dropdown[0].name + ' <span class="caret"></span>');
@@ -118,7 +118,7 @@ $(document).on("click", ".set-lang", function (event) {
     };
 
     // Set the editor language
-    editor.getSession().setMode("ace/mode/" + ($(this).data("name") == "c" || $(this).data("name") == "cpp") ? "c_cpp" : $(this).data("name"));
+    editor.getSession().setMode("ace/mode/" + $(this).data("name"));
 
     // Set the dropdown button text
     $("#lang-button").html($(this).data("name") + ' <span class="caret"></span>');
