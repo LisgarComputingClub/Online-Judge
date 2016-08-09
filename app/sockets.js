@@ -154,6 +154,22 @@ module.exports = function (io, sessionMiddleware) {
                     socket.emit("submission-status", "found");
                     // Run code through HackerRank
                     HackerRank.evaluateCode(data.code, data.lang, doc.testcases.input, doc.testcases.output, (res) => {
+                        // Check if the user already solved the problem
+                        User.findById(socket.request.session.passport.user, (err, found) => {
+                            // Check if the problem hasn't yet been solved
+                            if(found.grader.problemsSolved.indexOf(doc.pid) < 0) {
+                                // Add points
+                                if(doc.partial) {
+                                    // TODO
+                                } else {
+                                    found.grader.points += doc.points;
+                                }
+                                // Add this problem to solved problems
+                                found.grader.problemsSolved.push(doc.pid);
+                                // Save user
+                                found.save();
+                            }
+                        });
                         // Send the results to the client
                         socket.emit("submission-status", "evaluated");
                         socket.emit("submission-results", res);
