@@ -129,8 +129,25 @@ module.exports = function (io, sessionMiddleware) {
                         name: doc.google.name,
                         grader: doc.grader
                     };
-                    // Send the user data to the socket
-                    socket.emit("profile-response", userObj);
+                    // Check if the user has solved problems
+                    if(doc.grader.problemsSolved.length > 0) {
+                        // Loop through solved problems
+                        var count = 0;
+                        doc.grader.problemsSolved.forEach((val, index, arr) => {
+                            Problem.findOne({ pid: val }, (err, problem) => {
+                                userObj.grader.problemsSolved[index] = problem;
+                                count++;
+                                if(count >= doc.grader.problemsSolved.length) {
+                                    // Send the user info to the socket
+                                    socket.emit("profile-response", userObj);
+                                }
+                            });
+                        });
+                    } else {
+                        // Send the user info to the socket
+                        socket.emit("profile-response", userObj);
+                    }
+                    
                 } else {
                     // The user doesn't exist, redirect the user
                     socket.emit("redirect", "/users");
