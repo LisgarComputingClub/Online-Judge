@@ -165,8 +165,9 @@ module.exports = function (io, sessionMiddleware) {
                 if(err) {
                     console.log(err);
                 }
+                
                 // Check if we found a doc
-                if(typeof doc != "undefined") {
+                if (typeof doc != "undefined") {
                     // Tell the client that we found the problem in the database
                     socket.emit("submission-status", "found");
                     // Run code through HackerRank
@@ -188,7 +189,10 @@ module.exports = function (io, sessionMiddleware) {
                             }
                         });
                         // Send the results to the client
+                        console.log(res);
+                        console.log("AAAAAAAAAAAAA");
                         socket.emit("submission-status", "evaluated");
+
                         socket.emit("submission-results", res);
                     });
                 } else {

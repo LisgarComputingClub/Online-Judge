@@ -6,12 +6,20 @@
     height: 500px;
 }
 
-li.result-correct {
+.result-correct {
+	display: inline;
     color: mediumseagreen;
     font-weight: bold;
 }
 
-li.result-wrong {
+.result-wrong {
+	display: inline;
     color: red;
     font-weight: bold;
+}
+
+.result-tle {
+	display: inline;
+	color: gray;
+	font-weight: bold;
 }

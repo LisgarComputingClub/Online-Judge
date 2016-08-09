@@ -23,16 +23,21 @@ socket.on("submission-status", function(data) {
 
 // Display code results
 socket.on("submission-results", function(data) {
-
+    var results = data.result;
+    var message = data.message;
+    var time = data.time;
+    console.log(data);
     // Create the list of results
     $("div.modal-body").append('<ul id="results-list">');
 
     // Add results to the list
-    data.forEach(function(val, index, arr) {
-        if(val) {
-            $("#results-list").append('<li class="result-correct">Correct</li>');
+    results.forEach(function(val, index, arr) {
+        if (val) {
+            $("#results-list").append(`<li>[${time[index]}s] <div class="result-correct">Correct</div></li>`);
+        } else if (message[index] == "Terminated due to timeout") {
+            $("#results-list").append(`<li>[${time[index]}s] <div class="result-tle">Time Limit Exceeded</div></li>`);
         } else {
-            $("#results-list").append('<li class="result-wrong">Wrong</li>');
+            $("#results-list").append(`<li>[${time[index]}s] <div class="result-wrong">Wrong Answer</div></li>`);
         }
     });
 
