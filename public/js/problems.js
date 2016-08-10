@@ -62,7 +62,7 @@ function convertLanguages(languages) {
     return languages;
 }
 
-// Help popover
+// Search help popover
 
 // Enable the popover
 $("#search-box").popover();
