@@ -4,7 +4,7 @@ var mongoose = require("mongoose");
 // Submission schema 
 var submissionSchema = mongoose.Schema({
     pid: String,
-    author: mongoose.Schema.Types.ObjectId,
+    author: String,
     creation: Date,
     status: String,
     points: Number,
