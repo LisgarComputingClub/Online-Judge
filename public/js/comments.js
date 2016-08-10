@@ -1,7 +1,7 @@
 // Request comments when connected
 socket.on("connect", function () {
     socket.emit("comments-request", {
-        type: "problem",
+        type: type,
         pid: pid
     });
 });
@@ -38,7 +38,7 @@ function checkCommentsLoaded() {
     if (!commentsLoaded) {
         // Request comments
         socket.emit("comments-request", {
-            type: "problem",
+            type: type,
             pid: pid
         });
         // Set a timeout to check if comments are loaded again
@@ -66,14 +66,14 @@ $("#comment-submit-button").click(function () {
     $("#comment-error").hide();
     // Make an ajax request
     $.post("/comment", {
-        contentType: "problem",
+        contentType: type,
         contentId: pid,
         content: $("#comment-form").val()
     })
         .done(function (msg) {
             // Reload comments
             socket.emit("comments-request", {
-                type: "problem",
+                type: type,
                 pid: pid
             });
         })
