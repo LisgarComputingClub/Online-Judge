@@ -99,6 +99,74 @@ module.exports = function (app, passport, express) {
         }
     });
 
+    // Settings page
+    app.get("/settings", isLoggedIn, (req, res) => {
+        // Render the settings page
+        res.render("pages/protected/settings.ejs", {
+            user: req.user // Get the user from the session
+        });
+    });
+
+    // Users page
+    app.get("/users", isLoggedIn, (req, res) => {
+        // Render the users page
+        res.render("pages/protected/users.ejs", { user: req.user });
+    });
+
+    // Problems page
+    app.get("/problems", isLoggedIn, (req, res) => {
+        // Render the problems page
+        res.render("pages/protected/problems.ejs", { user: req.user });
+    });
+
+    // Individual problem page
+    app.get("/problem", isLoggedIn, (req, res) => {
+        // Check if a problem ID was specified
+        if(!req.query.pid) {
+            // Redirect to list of problems
+            res.redirect("/problems");
+        } else {
+            // Render the problem page
+            res.render("pages/protected/problem.ejs", { user: req.user, pid: req.query.pid });
+        }
+    });
+
+    // Problem editor
+    app.get("/create", isLoggedIn, (req, res) => {
+        // Check if a problem ID was specified
+        if(!req.query.pid) {
+            // Render the problem list
+            res.render("pages/protected/editorlist.ejs", { user: req.user, username: req.user.grader.username });
+        } else {
+            // Render the problem editor
+            res.render("pages/protected/editor.ejs", { user: req.user, pid: req.query.pid });
+        }
+    });
+
+    // Profile page
+    app.get("/profile", isLoggedIn, (req, res) => {
+        // Check if a username was specified
+        if(!req.query.username) {
+            // Redirect to list of users
+            res.redirect("/users");
+        } else {
+            // Render the profile page
+            res.render("pages/protected/profile.ejs", { username: req.query.username.toLowerCase(), user: req.user });
+        }
+    });
+
+    // Logout
+    app.get("/logout", (req, res) => {
+        // Log the session out
+        req.logout();
+        // Redirect to the homepage
+        res.redirect("/");
+    });
+
+    // =========
+    // Misc. API
+    // =========
+
     // First time account setup
     app.post("/setup", (req, res) => {
 
@@ -185,74 +253,7 @@ module.exports = function (app, passport, express) {
         }
     });
 
-    // Settings page
-    app.get("/settings", isLoggedIn, (req, res) => {
-        // Render the settings page
-        res.render("pages/protected/settings.ejs", {
-            user: req.user // Get the user from the session
-        });
-    });
-
-    // Users page
-    app.get("/users", isLoggedIn, (req, res) => {
-        // Render the users page
-        res.render("pages/protected/users.ejs", { user: req.user });
-    });
-
-    // Problems page
-    app.get("/problems", isLoggedIn, (req, res) => {
-        // Render the problems page
-        res.render("pages/protected/problems.ejs", { user: req.user });
-    });
-
-    // Individual problem page
-    app.get("/problem", isLoggedIn, (req, res) => {
-        // Check if a problem ID was specified
-        if(!req.query.pid) {
-            // Redirect to list of problems
-            res.redirect("/problems");
-        } else {
-            // Render the problem page
-            res.render("pages/protected/problem.ejs", { user: req.user, pid: req.query.pid });
-        }
-    });
-
-    // Problem editor
-    app.get("/create", isLoggedIn, (req, res) => {
-        // Check if a problem ID was specified
-        if(!req.query.pid) {
-            // Render the problem list
-            res.render("pages/protected/editorlist.ejs", { user: req.user, username: req.user.grader.username });
-        } else {
-            // Render the problem editor
-            res.render("pages/protected/editor.ejs", { user: req.user, pid: req.query.pid });
-        }
-    });
-
-    // Profile page
-    app.get("/profile", isLoggedIn, (req, res) => {
-        // Check if a username was specified
-        if(!req.query.username) {
-            // Redirect to list of users
-            res.redirect("/users");
-        } else {
-            // Render the profile page
-            res.render("pages/protected/profile.ejs", { username: req.query.username.toLowerCase(), user: req.user });
-        }
-    });
-
-    // Logout
-    app.get("/logout", (req, res) => {
-        // Log the session out
-        req.logout();
-        // Redirect to the homepage
-        res.redirect("/");
-    });
-
-    // =========
-    // Misc. API
-    // =========
-
+    // Change account settings
     app.post("/changeSettings", isLoggedIn, (req, res) => {
         // Find the user that requested the change
         User.findById(req.user._id, (err, doc) => {

@@ -10,6 +10,8 @@ var exists = require("simple-exist");
 var User = require("./models/user.js");
 // Problems model
 var Problem = require("./models/problem.js");
+// Comments model
+var Comment = require("./models/comment.js");
 
 // Get languages
 var languages;
@@ -231,6 +233,27 @@ module.exports = function (io, sessionMiddleware) {
                 socket.emit("editor-list-response", problems);
                 console.log(problems);
             });
+        });
+
+        // Get Comments
+        socket.on("comments-request", (data) => {
+            // Check the type of comments
+            if(data.type == "problem") {
+                // Find comments
+                Comment.find({ contentType: "problem", contentId: data.pid, deleted: false }, (err, docs) => {
+                    // Check if we found something
+                    if(!docs || err) {
+                        // Redirect the user
+                        socket.emit("redirect", "/problems");
+                        // Stop
+                        return;
+                    } else {
+                        // Send the comments to the user
+                        console.log("ay");
+                        socket.emit("comments-response", docs);
+                    }
+                });
+            }
         });
     });
 };

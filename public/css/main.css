@@ -16,3 +16,14 @@
 #submit-button {
   width: 100%;
 }
+
+.comments-header {
+  font-size: 36px;
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.comment-author {
+  font-size: 25px;
+  font-weight: bold;
+}
