@@ -7,6 +7,8 @@ var qs = require("querystring");
 var exists = require("simple-exist");
 // User model
 var User = require("./models/user.js");
+// Comment model
+var Comment = require("./models/comment.js");
 // Coloured console messages
 var colours = require("colors/safe");
 // Input validation
@@ -23,11 +25,11 @@ colours.setTheme({
 var languages;
 // Check if languages file exists
 exists.exists("languages.json", (data) => {
-    if(data) {
+    if (data) {
         // Read in languages
         fs.readFile("languages.json", (err, data) => {
             // Check for errors
-            if(err) {
+            if (err) {
                 throw err;
             } else {
                 languages = JSON.parse(data);
@@ -44,7 +46,7 @@ module.exports = function (app, passport, express) {
     // Home page
     app.get("/", (req, res) => {
         // Check if user is authenticated
-        if(req.isAuthenticated()) {
+        if (req.isAuthenticated()) {
             // Go to the settings page
             res.redirect("/settings");
         } else {
@@ -56,7 +58,7 @@ module.exports = function (app, passport, express) {
     // login page
     app.get("/login", (req, res) => {
         // Check if the user is authenticated
-        if(req.isAuthenticated()) {
+        if (req.isAuthenticated()) {
             // Go to the settings page
             res.redirect("/settings");
         } else {
@@ -88,7 +90,7 @@ module.exports = function (app, passport, express) {
     // First time account setup
     app.get("/setup", (req, res) => {
         // Check if the user is logged in and it's their first login
-        if(req.isAuthenticated() && req.user.grader.firstLogin) {
+        if (req.isAuthenticated() && req.user.grader.firstLogin) {
             // Render the first time setup page
             res.render("pages/protected/setup.ejs", {
                 errorsObj: req.query // Display any errors
@@ -122,7 +124,7 @@ module.exports = function (app, passport, express) {
     // Individual problem page
     app.get("/problem", isLoggedIn, (req, res) => {
         // Check if a problem ID was specified
-        if(!req.query.pid) {
+        if (!req.query.pid) {
             // Redirect to list of problems
             res.redirect("/problems");
         } else {
@@ -134,7 +136,7 @@ module.exports = function (app, passport, express) {
     // Problem editor
     app.get("/create", isLoggedIn, (req, res) => {
         // Check if a problem ID was specified
-        if(!req.query.pid) {
+        if (!req.query.pid) {
             // Render the problem list
             res.render("pages/protected/editorlist.ejs", { user: req.user, username: req.user.grader.username });
         } else {
@@ -146,7 +148,7 @@ module.exports = function (app, passport, express) {
     // Profile page
     app.get("/profile", isLoggedIn, (req, res) => {
         // Check if a username was specified
-        if(!req.query.username) {
+        if (!req.query.username) {
             // Redirect to list of users
             res.redirect("/users");
         } else {
@@ -174,7 +176,7 @@ module.exports = function (app, passport, express) {
         var errors = [];
 
         // Check if any required info was missing
-        if(!req.body.username) {
+        if (!req.body.username) {
             // Add an error
             errors.push("You must provide a username.");
         } else {
@@ -185,30 +187,30 @@ module.exports = function (app, passport, express) {
                 }
             }, (err, doc) => {
                 // Check if we found a doc
-                if(typeof doc != "undefined") {
+                if (typeof doc != "undefined") {
                     // Add an error
                     errors.push("That username is already taken. Please choose a different one.");
                 }
             });
 
             // Check if the name is long enough or too long
-            if(req.body.username.length < 3) {
+            if (req.body.username.length < 3) {
                 // Add an error
                 errors.push("Your username must be at least 3 characters long.");
-            } else if(req.body.username.length > 20) {
+            } else if (req.body.username.length > 20) {
                 // Add an error
                 errors.push("Your username must be up to 20 characters long.");
             }
 
             // Check if username is alphanumeric
-            if(!validator.isAlpha(req.body.username)) {
+            if (!validator.isAlpha(req.body.username)) {
                 // Add an error
                 errors.push("Your username must be alphanumeric.");
             }
         }
-        
+
         // Check for errors
-        if(errors.length > 0) {
+        if (errors.length > 0) {
             // Create the query string object
             var qsObj = {
                 errors: errors,
@@ -223,24 +225,24 @@ module.exports = function (app, passport, express) {
             // Find the user
             User.findById(req.user._id, (err, doc) => {
                 // Check for errors
-                if(err) {
+                if (err) {
                     // Error 404: resource not found
                     res.sendStatus(404);
                 } else {
                     // Update info
-                    if(typeof req.body.username != "undefined") {
+                    if (typeof req.body.username != "undefined") {
                         doc.grader.username = req.body.username.toLowerCase();
                     }
-                    if(req.body.age != "") {
+                    if (req.body.age != "") {
                         doc.grader.age = req.body.age;
                     }
-                    if(req.body.school != "") {
+                    if (req.body.school != "") {
                         doc.grader.school = req.body.school;
                     }
-                    if(req.body.website != "") {
+                    if (req.body.website != "") {
                         doc.grader.website = req.body.website;
                     }
-                    if(req.body.bio != "") {
+                    if (req.body.bio != "") {
                         doc.grader.bio = req.body.bio;
                     }
                     doc.grader.firstLogin = false;
@@ -258,14 +260,14 @@ module.exports = function (app, passport, express) {
         // Find the user that requested the change
         User.findById(req.user._id, (err, doc) => {
             // Check for errors
-            if(err) {
+            if (err) {
                 // Error 404: resource not found
                 res.sendStatus(404);
             } else {
                 // Success
                 var success = false;
                 // Update the user's info
-                switch(req.body.name) {
+                switch (req.body.name) {
                     case "name":
                         // Change the user's name
                         doc.google.name = req.body.value.toLowerCase();
@@ -296,9 +298,9 @@ module.exports = function (app, passport, express) {
                         res.sendStatus(400);
                         break;
                 }
-                
+
                 // Check if it was a success
-                if(success) {
+                if (success) {
                     // Save the updated user
                     doc.save();
                     // Send a successful error code
@@ -308,6 +310,50 @@ module.exports = function (app, passport, express) {
         });
     });
 
+    // Comments
+    app.post("/comment", isLoggedIn, (req, res) => {
+        // Check if all necessary variables are setTheme
+        if (!req.body.contentType || !req.body.contentId || !req.body.content) {
+            // Send a bad request error code
+            console.log(1);
+            res.sendStatus(400);
+        } else {
+            // Check if the comment was for a problem or user
+            switch (req.body.contentType) {
+                case "problem":
+                    // Create a new comment
+                    var comment = new Comment({
+                        contentType: "problem",
+                        contentId: req.body.contentId,
+                        author: req.user.grader.username,
+                        content: req.body.content,
+                        deleted: false,
+                        creationDate: Date.now()
+                    });
+
+                    // Sae the comment
+                    comment.save((err) => {
+                        // Check for errors
+                        if (err) {
+                            // Send an internal server error code
+                            console.log(2);
+                            res.sendStatus(500);
+                        } else {
+                            // Send a success code
+                            console.log(3);
+                            res.sendStatus(200);
+                        }
+                    });
+                    break;
+                    
+                default:
+                    // Send a bad request error code
+                    console.log(4);
+                    res.sendStatus(400);
+            }
+        }
+    });
+
     // =========
     // 404 Error
     // =========
@@ -315,7 +361,7 @@ module.exports = function (app, passport, express) {
     // DO NOT PUT ANY ROUTES BELOW THIS ONE
     // DO NOT PUT ANY ROUTES BELOW THIS ONE
     // DO NOT PUT ANY ROUTES BELOW THIS ONE
-    
+
     app.get("*", (req, res) => {
         // Page not found, return 404 error
         res.status(404).send('Error: page not found. <a href="/">Try going home.</a>');
@@ -325,10 +371,10 @@ module.exports = function (app, passport, express) {
 // Check if a user is logged in
 function isLoggedIn(req, res, next) {
     // Check if it's the user's first time logging in
-    if(req.user.grader.firstLogin) {
+    if (req.user.grader.firstLogin) {
         // Go to the first time setup page
         res.redirect("/setup");
-    // Check if the user is logged in
+        // Check if the user is logged in
     } else if (req.isAuthenticated()) {
         // Continue to the next page
         return next();
