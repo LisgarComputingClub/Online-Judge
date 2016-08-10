@@ -18,70 +18,70 @@
         <!-- Header include -->
         <%- include("../../partials/protected/header.ejs", { pageName: "problems" }); %>
 
-        <!-- Content -->
-        <div class="jumbotron">
-            <h1 id="problem-name" class="text-center">Loading problem...</h1>
-            <hr>
-            <div class="row">
+            <!-- Content -->
+            <div class="jumbotron">
+                <h1 id="problem-name" class="text-center">Loading problem...</h1>
+                <hr>
+                <div class="row">
 
-                <!-- Problem info -->
-                <div class="col-sm-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 id="problem-info" class="text-center">Loading problem...</h4>
-                        </div>
-                        <div id="problem-statement" class="panel-body">
-                        </div>
-                    </div>
-
-                    <!-- Editor controls -->
-                    <div class="row">
-                        <!-- Languages dropdown -->
-                        <div class="col-sm-6">
-                            <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle" id="lang-button" type="button" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                    Loading languages...
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" id="lang-dropdown-list" aria-labelledby="lang-button">
-                                    <li>Loading languages...</li>
-                                </ul>
+                    <!-- Problem info -->
+                    <div class="col-sm-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 id="problem-info" class="text-center">Loading problem...</h4>
+                            </div>
+                            <div id="problem-statement" class="panel-body">
                             </div>
                         </div>
 
-                        <!-- Submit button -->
-                        <div class="col-sm-2 col-sm-offset-4">
-                            <button class="btn btn-success pull-right" id="submit-button">Submit Code</button>
+                        <!-- Editor controls -->
+                        <div class="row">
+                            <!-- Languages dropdown -->
+                            <div class="col-sm-6">
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle" id="lang-button" type="button" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                    Loading languages...
+                                    <span class="caret"></span>
+                                </button>
+                                    <ul class="dropdown-menu" id="lang-dropdown-list" aria-labelledby="lang-button">
+                                        <li>Loading languages...</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Submit button -->
+                            <div class="col-sm-2 col-sm-offset-4">
+                                <button class="btn btn-success pull-right" id="submit-button">Submit Code</button>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <!-- Editor -->
+                        <pre id="editor"></pre>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Comments -->
+                <%- include("../../partials/protected/comments.ejs", { type: "problem" }); %>
+            </div>
+
+            <!-- Results modal -->
+            <div class="modal fade" id="result-modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title">Submission Results</h2>
+                        </div>
+                        <div class="modal-body">
+                            <h4 class="text-center" id="submission-status">Sending code to server...</h4>
                         </div>
                     </div>
-
-                    <br>
-
-                    <!-- Editor -->
-                    <pre id="editor"></pre>
                 </div>
             </div>
-
-            <hr>
-
-            <!-- Comments -->
-            <%- include("../../partials/protected/comments.ejs", { type: "problem" }); %>
-        </div>
-
-        <!-- Results modal -->
-        <div class="modal fade" id="result-modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="modal-title">Submission Results</h2>
-                    </div>
-                    <div class="modal-body">
-                        <h4 class="text-center" id="submission-status">Sending code to server...</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </div>
 
@@ -101,6 +101,33 @@
     <script src="/js/ace/ace.js"></script>
     <!-- Marked -->
     <script src="/marked.min.js"></script>
+    <!-- MathJax -->
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax configuration -->
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [['$','$'], ['\\(','\\)']],
+            displayMath: [['$$','$$'], ['\[','\]']],
+            processEscapes: true,
+            processEnvironments: true,
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+            TeX: { equationNumbers: { autoNumber: "AMS" },
+                extensions: ["AMSmath.js", "AMSsymbols.js"] }
+        }
+        });
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Queue(function() {
+            // Fix <code> tags after MathJax finishes running. This is a
+            // hack to overcome a shortcoming of Markdown. Discussion at
+            // https://github.com/mojombo/jekyll/issues/199
+            var all = MathJax.Hub.getAllJax(), i;
+            for(i = 0; i < all.length; i += 1) {
+                all[i].SourceElement().parentNode.className += ' has-jax';
+            }
+        });
+    </script>
     <!-- Problem ID -->
     <script>
             var pid = "<%= pid %>";
