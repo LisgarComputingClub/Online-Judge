@@ -8,6 +8,8 @@ var problemSchema = mongoose.Schema({
     author: mongoose.Schema.Types.ObjectId,
     creation: Date,
     lastEdit: Date,
+    approved: Boolean,
+    approvalDate: Date,
     statement: String,
     points: Number,
     partial: Boolean,
