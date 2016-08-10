@@ -98,6 +98,9 @@ socket.on("problem-response", function (problem) {
 
     // Set the dropdown button text
     $("#lang-button").html(dropdown[0].name + ' <span class="caret"></span>');
+
+    // Retrigger MathJax
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
 });
 
 // Dropdown languages
