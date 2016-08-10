@@ -1,0 +1,13 @@
+<!-- Header -->
+<div class="header clearfix">
+    <nav>
+        <ul class="nav nav-pills pull-right">
+            <li role="presentation" <% if(pageName == "myProfile") { %>class="active"<% } %>><a href="/profile?username=<%= user.grader.username %>">My Profile</a></li>
+            <li role="presentation" <% if(pageName == "settings") { %>class="active"<% } %>><a href="/settings">Settings</a></li>
+            <li role="presentation" <% if(pageName == "users") { %>class="active"<% } %>><a href="/users">Users</a></li>
+            <li role="presentation" <% if(pageName == "problems") { %>class="active"<% } %>><a href="/problems">Problems</a></li>
+            <li role="presentation"><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+    <h3 class="text-muted">LCC Online Judge</h3>
+</div>

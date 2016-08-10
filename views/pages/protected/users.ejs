@@ -13,19 +13,8 @@
 <body>
     <div class="container">
 
-        <!-- Header -->
-        <div class="header clearfix">
-            <nav>
-                <ul class="nav nav-pills pull-right">
-                    <li role="presentation"><a href="/profile?username=<%= user.grader.username %>">My Profile</a></li>
-                    <li role="presentation"><a href="/settings">Settings</a></li>
-                    <li role="presentation" class="active"><a href="/users">Users</a></li>
-                    <li role="presentation"><a href="/problems">Problems</a></li>
-                    <li role="presentation"><a href="/logout">Logout</a></li>
-                </ul>
-            </nav>
-            <h3 class="text-muted">LCC Online Judge</h3>
-        </div>
+        <!-- Header include -->
+        <%- include("../../partials/protected/header.ejs", { pageName: "users" }); %>
 
         <!-- Content -->
         <div class="jumbotron">
