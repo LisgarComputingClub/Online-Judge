@@ -4,6 +4,7 @@ var mongoose = require("mongoose");
 // Comment schema
 var commentchema = mongoose.Schema({
     contentType: String,
+    contentId: String,
     author: String,
     creationDate: Date,
     lastEdit: Date,
