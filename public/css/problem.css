@@ -29,3 +29,15 @@
 	color: gray;
 	font-weight: bold;
 }
+
+/* MathJax */
+.has-jax {
+    background-color: transparent;
+}
+
+.MathJax {
+    position: relative;
+    display: inline-block ! important;
+    background-color: white;
+    border-radius: 5px;
+}
