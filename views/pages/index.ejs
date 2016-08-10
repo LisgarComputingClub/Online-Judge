@@ -13,16 +13,8 @@
 <body>
     <div class="container">
 
-        <!-- Header -->
-        <div class="header clearfix">
-            <nav>
-                <ul class="nav nav-pills pull-right">
-                    <li role="presentation" class="active"><a href="/">Home</a></li>
-                    <li role="presentation"><a href="/login">Login</a></li>
-                </ul>
-            </nav>
-            <h3 class="text-muted">LCC Online Judge</h3>
-        </div>
+        <!-- Header include -->
+        <%- include("../partials/header.ejs", { pageName: "home" }); %>
 
         <div class="jumbotron">
             <h1>Welcome to the LCC Online Judge</h1>

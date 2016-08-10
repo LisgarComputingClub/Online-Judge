@@ -30,3 +30,13 @@ socket.on("users-response", function(userArr) {
 
 // Set beginning sort
 userList.sort("points", { order: "desc" });
+
+// Search help popover
+
+// Enable the popover
+$("#search-box").popover();
+
+// Hide the popover when the user types in the search box
+$("#search-box").keyup(function() {
+    $("#search-box").popover("hide");
+});

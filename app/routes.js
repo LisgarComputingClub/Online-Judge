@@ -217,6 +217,18 @@ module.exports = function (app, passport, express) {
         }
     });
 
+    // Problem editor
+    app.get("/create", isLoggedIn, (req, res) => {
+        // Check if a problem ID was specified
+        if(!req.query.pid) {
+            // Render the problem list
+            res.render("pages/protected/editorlist.ejs", { user: req.user, username: req.user.grader.username });
+        } else {
+            // Render the problem editor
+            res.render("pages/protected/editor.ejs", { user: req.user, pid: req.query.pid });
+        }
+    });
+
     // Profile page
     app.get("/profile", isLoggedIn, (req, res) => {
         // Check if a username was specified

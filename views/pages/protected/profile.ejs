@@ -17,19 +17,13 @@
 <body>
     <div class="container">
 
-        <!-- Header -->
-        <div class="header clearfix">
-            <nav>
-                <ul class="nav nav-pills pull-right">
-                    <li role="presentation" class="active"><a href="/profile?username=<%= user.grader.username %>">My Profile</a></li>
-                    <li role="presentation"><a href="/settings">Settings</a></li>
-                    <li role="presentation"><a href="/users">Users</a></li>
-                    <li role="presentation"><a href="/problems">Problems</a></li>
-                    <li role="presentation"><a href="/logout">Logout</a></li>
-                </ul>
-            </nav>
-            <h3 class="text-muted">LCC Online Judge</h3>
-        </div>
+        <!-- Header include -->
+        <% // Check if this is my page %>
+        <% if(username == user.grader.username) { %>
+            <%- include("../../partials/protected/header.ejs", { pageName: "myProfile" }); %>
+        <% } else { %>
+            <%- include("../../partials/protected/header.ejs", { pageName: "users" }); %>
+        <% } %>
 
         <div class="jumbotron">
             <h1 id="profile-name" class="text-center">Loading user...</h1>

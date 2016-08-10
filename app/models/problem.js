@@ -5,9 +5,11 @@ var mongoose = require("mongoose");
 var problemSchema = mongoose.Schema({
     pid: String,
     name: String,
-    author: mongoose.Schema.Types.ObjectId,
+    author: String,
     creation: Date,
     lastEdit: Date,
+    approved: Boolean,
+    approvalDate: Date,
     statement: String,
     points: Number,
     partial: Boolean,

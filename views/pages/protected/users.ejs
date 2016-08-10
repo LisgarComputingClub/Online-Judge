@@ -13,19 +13,8 @@
 <body>
     <div class="container">
 
-        <!-- Header -->
-        <div class="header clearfix">
-            <nav>
-                <ul class="nav nav-pills pull-right">
-                    <li role="presentation"><a href="/profile?username=<%= user.grader.username %>">My Profile</a></li>
-                    <li role="presentation"><a href="/settings">Settings</a></li>
-                    <li role="presentation" class="active"><a href="/users">Users</a></li>
-                    <li role="presentation"><a href="/problems">Problems</a></li>
-                    <li role="presentation"><a href="/logout">Logout</a></li>
-                </ul>
-            </nav>
-            <h3 class="text-muted">LCC Online Judge</h3>
-        </div>
+        <!-- Header include -->
+        <%- include("../../partials/protected/header.ejs", { pageName: "users" }); %>
 
         <!-- Content -->
         <div class="jumbotron">
@@ -47,7 +36,7 @@
                                 <!-- Search box -->
                                 <div class="row">
                                     <div class="col-sm-offset-9 col-sm-3">
-                                        <input class="search form-control" placeholder="Find a user">
+                                        <input id="search-box" class="search form-control" placeholder="Find a user" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="left" title="Search Help" data-content="Use the search box to filter users by any attribute (name, points, school, etc)">
                                     </div>
                                 </div>
                                 <br>

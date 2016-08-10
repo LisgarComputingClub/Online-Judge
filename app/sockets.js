@@ -39,7 +39,6 @@ module.exports = function (io, sessionMiddleware) {
 
     // Check if new connections are logged in
     io.on("connection", (socket) => {
-
         if (typeof socket.request.session.passport !== "undefined") {
             console.log("Logged in: " + socket.request.session.passport.user);
         } else {
@@ -198,6 +197,39 @@ module.exports = function (io, sessionMiddleware) {
                     // Error
                     console.log("Error");
                 }
+            });
+        });
+
+        // Problem editor list
+        socket.on("editor-list-request", (data) => {
+            // Double check that usernames match
+            User.findById(socket.request.session.passport.user, (err, userDoc) => {
+                if(err || userDoc.grader.username != data) {
+                    // Redirect the user
+                    socket.emit("redirect", "/");
+                    // Stop
+                    return;
+                }
+            });
+
+            // Get a list of the user's problems
+            Problem.find({ author: data }, (err, problemDocs) => {
+                // Go through each problem adding it to an array to send to the client
+                var problems = [];
+                problemDocs.forEach((val, index, arr) => {
+                    problems.push({
+                        pid: val.pid,
+                        name: val.name,
+                        partial: val.partial,
+                        points: val.points,
+                        languages: val.languages,
+                        approved: val.approved
+                    });
+                });
+
+                // Send the user the list of problems
+                socket.emit("editor-list-response", problems);
+                console.log(problems);
             });
         });
     });
