@@ -60,4 +60,14 @@ function convertLanguages(languages) {
         arr[index] = hrLanguages.languages.names[val];
     });
     return languages;
-};
+}
+
+// Help popover
+
+// Enable the popover
+$("#search-box").popover();
+
+// Hide the popover when the user types in the search box
+$("#search-box").keyup(function() {
+    $("#search-box").popover("hide");
+});
