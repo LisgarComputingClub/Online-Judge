@@ -26,29 +26,33 @@ socket.on("submission-results", function(data) {
     var results = data.results;
     var message = data.message;
     var time = data.time;
-    console.log(data);
-    // Create the list of results
-    $("div.modal-body").append('<ul id="results-list">');
 
-    // Add results to the list
-    results.forEach(function(val, index, arr) {
-        if (val === true) {
-            $("#results-list").append("<li>[" + time[index] + "s] <div class=\"result-correct\">Correct</div></li>");
-        } else if (val) {
-            //System error; SIGSEV, SIGABRT, compile error, etc.
-            $("#results-list").append("<li><div class=\"result-err\">" + (message[index] + ": " + val).trunc(80) + "</div></li>");
-        } else if (message[index] == "Terminated due to timeout") {
-            $("#results-list").append("<li>[" + time[index] + "s] <div class=\"result-tle\">Time Limit Exceeded</div></li>");
-        } else if (message[index] == "Segmentation Fault") {
-            $("#results-list").append("<li>[" + time[index] + "s] <div class=\"result-err\">Segmentation Fault</div></li>");
-        } else {
-            $("#results-list").append("<li>[" + time[index] + "s] <div class=\"result-wrong\">Wrong Answer</div></li>");
-        }
-    });
+    if (results[0].substr(0, 4) == "solu") {
+        $("div.modal-body").append('<div class="result-wrong">' + results[0].trunc(80) + '</div>');
+    } else {
+        // Create the list of results
+        $("div.modal-body").append('<ul id="results-list">');
 
-    // End the list
-    $("div.modal-body").append("</ul>");
+        // Add results to the list
+        results.forEach(function(val, index, arr) {
+            if (val === true) {
+                $("#results-list").append("<li>[" + time[index] + "s] <div class=\"result-correct\">Correct</div></li>");
+            } else if (val) {
+                //System error; SIGSEV, SIGABRT, compile error, etc.
+                $("#results-list").append("<li><div class=\"result-err\">" + (message[index] + ": " + val).trunc(80) + "</div></li>");
+            } else if (message[index] == "Terminated due to timeout") {
+                $("#results-list").append("<li>[" + time[index] + "s] <div class=\"result-tle\">Time Limit Exceeded</div></li>");
+            } else if (message[index] == "Segmentation Fault") {
+                $("#results-list").append("<li>[" + time[index] + "s] <div class=\"result-err\">Segmentation Fault</div></li>");
+            } else {
+                $("#results-list").append("<li>[" + time[index] + "s] <div class=\"result-wrong\">Wrong Answer</div></li>");
+            }
+        });
 
+        // End the list
+        $("div.modal-body").append("</ul>");
+    }
+    
     // Add a close button
     $("div.modal-content").append('<div id="result-footer" class="modal-footer"><button id="results-button" type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>');
 });
