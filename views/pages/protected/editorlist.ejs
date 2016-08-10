@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Problem Editor - LCC Online Judge</title>
+    <meta charset="utf-8">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <!-- Global custom styles -->
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- Header include -->
+        <%- include("../../partials/protected/header.ejs", { pageName: "create" }); %>
+
+        <!-- Content -->
+        <div class="jumbotron">
+            <h1 class="text-center">Problems</h1>
+            <hr>
+            <div class="row">
+
+                <!-- List of problems -->
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="text-center">Your Problems</h3>
+                        </div>
+                        <div class="panel-body">
+
+                            <!-- Problem table wrapper -->
+                            <div id="problems-table-wrapper">
+
+                                <!-- Search -->
+                                <div class="row">
+                                    
+                                    <!-- Search box -->
+                                    <div class="col-sm-offset-9 col-sm-3">
+                                        <input id="search-box" class="search form-control" placeholder="Find a problem" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="left" title="Search Help" data-content="Use the search box to filter problems by any attribute (name, points, languages, approval status, etc)">
+                                    </div>
+                                </div>
+                                <br>
+
+                                <!-- Problem table -->
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th id="problems-list-thead-name" class="sort noselect" data-sort="pid">Problem ID</th>
+                                            <th id="problems-list-thead-name" class="sort noselect" data-sort="name">Name</th>
+                                            <th id="problems-list-thead-points" class="sort noselect" data-sort="points">Points</th>
+                                            <th id="problems-list-thead-partial" class="sort noselect" data-sort="partial">Partial</th>
+                                            <th id="problems-list-thead-languages" class="sort noselect" data-sort="languages">Languages</th>
+                                            <th id="problems-list-thead-languages" class="sort noselect" data-sort="approved">Approved</th>
+                                            <th id="problems-list-thead-languages" class="sort noselect" data-sort="edit">Edit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list" id="problems-table-tbody">
+                                        <tr>
+                                            <td class="pid item">Loading problems...</td>
+                                            <td class="name item">Loading problems...</td>
+                                            <td class="points item">Loading problems...</td>
+                                            <td class="partial item">Loading problems...</td>
+                                            <td class="languages item">Loading problems...</td>
+                                            <td class="approved item">Loading problems...</td>
+                                            <td class="edit link item">Loading problems...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Scripts -->
+        <!-- jQuery -->
+        <script src="/jquery-3.1.0.min.js"></script>
+        <!-- Bootstrap -->
+        <script src="/bootstrap/js/bootstrap.min.js"></script>
+        <!-- List.js -->
+        <script src="/js/list.min.js"></script>
+        <!-- Socket.io -->
+        <script src="http://localhost:8081/socket.io/socket.io.js"></script>
+        <script src="/js/socket.io/index.js"></script>
+        <!-- Username -->
+        <script>
+            var username = "<%= username %>";
+       </script>
+        <!-- Problem editor list scripts -->
+        <script src="/js/editorlist.js"></script>
+</body>
+
+</html>

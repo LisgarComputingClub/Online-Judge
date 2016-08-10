@@ -222,7 +222,7 @@ module.exports = function (app, passport, express) {
         // Check if a problem ID was specified
         if(!req.query.pid) {
             // Render the problem list
-            res.render("pages/protected/editorlist.ejs", { user: req.user });
+            res.render("pages/protected/editorlist.ejs", { user: req.user, username: req.user.grader.username });
         } else {
             // Render the problem editor
             res.render("pages/protected/editor.ejs", { user: req.user, pid: req.query.pid });
