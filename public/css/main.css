@@ -24,6 +24,10 @@
 }
 
 .comment-author {
-  font-size: 25px;
+  font-size: 22px;
   font-weight: bold;
+}
+
+.comment-error {
+  color: red;
 }
