@@ -23,7 +23,6 @@ socket.on("submission-status", function(data) {
 
 // Display code results
 socket.on("submission-results", function(data) {
-    console.log("FUCK");
     var results = data.results;
     var message = data.message;
     var time = data.time;
@@ -34,16 +33,16 @@ socket.on("submission-results", function(data) {
     // Add results to the list
     results.forEach(function(val, index, arr) {
         if (val === true) {
-            $("#results-list").append(`<li>[${time[index]}s] <div class="result-correct">Correct</div></li>`);
+            $("#results-list").append("<li>[" + time[index] + "s] <div class=\"result-correct\">Correct</div></li>");
         } else if (val) {
             //System error; SIGSEV, SIGABRT, compile error, etc.
-            $("#results-list").append(`<li><div class="result-err">${(message[index] + ": " + val).trunc(80)}</div></li>`);
+            $("#results-list").append("<li><div class=\"result-err\">" + (message[index] + ": " + val).trunc(80) + "</div></li>");
         } else if (message[index] == "Terminated due to timeout") {
-            $("#results-list").append(`<li>[${time[index]}s] <div class="result-tle">Time Limit Exceeded</div></li>`);
+            $("#results-list").append("<li>[" + time[index] + "s] <div class=\"result-tle\">Time Limit Exceeded</div></li>");
         } else if (message[index] == "Segmentation Fault") {
-            $("#results-list").append(`<li>[${time[index]}s] <div class="result-err">Segmentation Fault</div></li>`);
+            $("#results-list").append("<li>[" + time[index] + "s] <div class=\"result-err\">Segmentation Fault</div></li>");
         } else {
-            $("#results-list").append(`<li>[${time[index]}s] <div class="result-wrong">Wrong Answer</div></li>`);
+            $("#results-list").append("<li>[" + time[index] + "s] <div class=\"result-wrong\">Wrong Answer</div></li>");
         }
     });
 
