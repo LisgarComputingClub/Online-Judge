@@ -18,6 +18,12 @@
     font-weight: bold;
 }
 
+.result-err {
+	display: inline;
+    color: orange;
+    font-weight: bold;
+}
+
 .result-tle {
 	display: inline;
 	color: gray;

@@ -165,7 +165,7 @@ module.exports = function (io, sessionMiddleware) {
                 if(err) {
                     console.log(err);
                 }
-                
+
                 // Check if we found a doc
                 if (typeof doc != "undefined") {
                     // Tell the client that we found the problem in the database
@@ -192,7 +192,6 @@ module.exports = function (io, sessionMiddleware) {
                         console.log(res);
                         console.log("AAAAAAAAAAAAA");
                         socket.emit("submission-status", "evaluated");
-
                         socket.emit("submission-results", res);
                     });
                 } else {
