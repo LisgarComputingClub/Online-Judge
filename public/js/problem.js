@@ -23,7 +23,7 @@ socket.on("submission-status", function(data) {
 
 // Display code results
 socket.on("submission-results", function(data) {
-    var results = data.result;
+    var results = data.results;
     var message = data.message;
     var time = data.time;
     console.log(data);
