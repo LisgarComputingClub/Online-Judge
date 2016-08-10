@@ -2,7 +2,7 @@
 var mongoose = require("mongoose");
 
 // Comment schema
-var commentchema = mongoose.Schema({
+var commentSchema = mongoose.Schema({
     contentType: String,
     contentId: String,
     author: String,
