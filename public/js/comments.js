@@ -1,3 +1,10 @@
+if (connected) {
+    socket.emit("comments-request", {
+        type: type,
+        pid: pid
+    });    
+}
+
 // Request comments when connected
 socket.on("connect", function () {
     socket.emit("comments-request", {

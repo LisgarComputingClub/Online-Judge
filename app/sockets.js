@@ -108,6 +108,7 @@ module.exports = function (io, sessionMiddleware) {
                     console.log("Error getting info for problem " + pid + ": " + err);
                 } else if(problem.length > 0) {
                     // Send the problem data to the user
+                    console.log("emitting problem");
                     socket.emit("problem-response", problem[0]);
                 } else {
                     // The problem doesn't exist, redirect the user
@@ -190,8 +191,6 @@ module.exports = function (io, sessionMiddleware) {
                             }
                         });
                         // Send the results to the client
-                        console.log(res);
-                        console.log("AAAAAAAAAAAAA");
                         socket.emit("submission-status", "evaluated");
                         socket.emit("submission-results", res);
                     });

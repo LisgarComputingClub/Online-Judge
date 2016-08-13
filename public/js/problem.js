@@ -1,3 +1,7 @@
+if (connected) {
+    socket.emit("problem-request", pid);
+}
+
 // Request problem data when connected
 socket.on("connect", function () {
     socket.emit("problem-request", pid);
