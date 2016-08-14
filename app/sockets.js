@@ -256,7 +256,6 @@ module.exports = function (io, sessionMiddleware) {
                         return;
                     } else {
                         // Send the comments to the user
-                        console.log("ay");
                         socket.emit("comments-response", docs);
                     }
                 });
