@@ -14,7 +14,13 @@ var userSchema = mongoose.Schema({
         firstLogin: Boolean,
         username: String,
         points: Number,
-        problemsSolved: [String],
+        problemsSolved: [
+            {
+                pid: String, 
+                name: String,
+                points: Number
+            }
+        ],
         school: String,
         age: Number,
         website: String,

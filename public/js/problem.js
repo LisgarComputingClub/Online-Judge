@@ -9,28 +9,33 @@ socket.on("connect", function () {
 
 // Get submission status
 socket.on("submission-status", function(data) {
-    switch(data) {
-        case "received":
-            $("#submission-status").text("Looking up problem in database...");
-            break;
-        case "found":
-            $("#submission-status").text("Evaluating code...");
-            break;
-        case "evaluated":
-            $("#submission-status").text("Results:");
+    if (typeof data == "number") {
+        for (var i = 0; i < data; i++) {
+            $("#results-list").append("<li id=\"test-result-" + i.toString()  + "\">Case " + i.toString() + "</li>");
+        }
+    } else {
+        switch(data) {
+            case "received":
+                $("#submission-status").text("Looking up problem in database...");
+                break;
+            case "found":
+                $("#submission-status").text("Evaluating code...");
+                break;
+            case "evaluated":
+                $("#submission-status").text("Results:");
 
-            // Create the list of results
-            $("div.modal-body").append('<ul id="results-list">');
-            // End the list
-            $("div.modal-body").append("</ul>");
-    
-            // Add a close button
-            $("div.modal-content").append('<div id="result-footer" class="modal-footer"><button id="results-button" type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>');
-            $("#results-list").append("<li>test</li>");
-            break;
-        default:
-            console.log("Unknown submission status.");
-            break;
+                // Create the list of results
+                $("div.modal-body").append('<ul id="results-list">');
+                // End the list
+                $("div.modal-body").append("</ul>");
+        
+                // Add a close button
+                $("div.modal-content").append('<div id="result-footer" class="modal-footer"><button id="results-button" type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>');
+                break;
+            default:
+                console.log("Unknown submission status.");
+                break;
+        }
     }
 });
 
@@ -39,21 +44,22 @@ socket.on("submission-results", function(data) {
     var result = data.results[0];
     var message = data.message[0];
     var time = data.time[0];
+    console.log(result);
     if (typeof result == "string" && result.substr(0, 4) == "solu") {
         $("div.modal-body").append('<div class="result-wrong">' + result.trunc(80) + '</div>');
     } else {
         // Add results to the list
         if (result === true) {
-            $("#results-list").append("<li>[" + time[index] + "s] <div class=\"result-correct\">Correct</div></li>");
+            $("#test-result-" + data.casen.toString()).html("<li>[" + time + "s] <div class=\"result-correct\">Correct</div></li>");
         } else if (result) {
                 //System error; SIGSEV, SIGABRT, compile error, etc.
-                $("#results-list").append("<li><div class=\"result-err\">" + (message[index] + ": " + val).trunc(80) + "</div></li>");
+                $("#test-result-" + data.casen.toString()).html("<li><div class=\"result-err\">" + (message + ": " + val).trunc(80) + "</div></li>");
         } else if (message == "Terminated due to timeout") {
-                $("#results-list").append("<li>[" + time + "s] <div class=\"result-tle\">Time Limit Exceeded</div></li>");
+                $("#test-result-" + data.casen.toString()).html("<li>[" + time + "s] <div class=\"result-tle\">Time Limit Exceeded</div></li>");
         } else if (message == "Segmentation Fault") {
-                $("#results-list").append("<li>[" + time + "s] <div class=\"result-err\">Segmentation Fault</div></li>");
+                $("#test-result-" + data.casen.toString()).html("<li>[" + time + "s] <div class=\"result-err\">Segmentation Fault</div></li>");
         } else {
-                $("#results-list").append("<li>[" + time + "s] <div class=\"result-wrong\">Wrong Answer</div></li>");
+                $("#test-result-" + data.casen.toString()).html("<li>[" + time + "s] <div class=\"result-wrong\">Wrong Answer</div></li>");
         }
     }
 });
@@ -152,7 +158,7 @@ $("#submit-button").click(function() {
 
     // Create the code object
     var code = {
-        code: editor.getValue(),
+        code: '#include <iostream>\n using namespace std; int main() { cout << "hello world" << endl; }',//editor.getValue(),
         lang: curLang.code,
         pid: pid
     };

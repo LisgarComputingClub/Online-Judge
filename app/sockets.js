@@ -174,34 +174,65 @@ module.exports = function (io, sessionMiddleware) {
                     socket.emit("submission-status", "found");
 
                     var num_eval = 0;
-                    var score = 0;
+                    var num_eval_2 = 0;
+                    var score = 0.0;
                     socket.emit("submission-status", "evaluated");
-                    for (num_eval = 0; num_eval < doc.testcases.input.length; num_eval++) {
+                    socket.emit("submission-status", doc.testcases.input.length);
+                    for (i = 0; i < doc.testcases.input.length; i++) {
                         // Run code through HackerRank
-                        HackerRank.evaluateCode(data.code, data.lang, doc.testcases.input.slice(num_eval, num_eval + 1), doc.testcases.output.slice(num_eval, num_eval + 1), (res) => {
+                        HackerRank.evaluateCode(i, data.code, data.lang, doc.testcases.input.slice(i, i + 1), doc.testcases.output.slice(i, i + 1), (res) => {
                             if (res.results[0] === true) {
-                                score += doc.testcases.weight[num_eval] * doc.points;
+                                if (doc.testcases.weight != undefined) {
+                                    score += doc.testcases.weight[res.case] * doc.points;
+                                } else {
+                                    score += doc.points / doc.testcases.input.length;
+                                }
                             }
+
                             console.log(res);
                             // Send the results to the client
                             socket.emit("submission-results", res);
+                            num_eval++;
+
+                            if (num_eval == doc.testcases.input.length) {
+                                
+                                if (Math.abs(score - doc.points) <= 0.0001) {
+                                    score = doc.points;
+                                }
+                                if (!doc.partial && score < doc.points) {
+                                    score = 0;
+                                }
+
+                                console.log(score);
+
+                                //TODO: points worked out here; score contains total score for this submission (counts partial vs no partial)
+                                User.findById(socket.request.session.passport.user, (err, found) => {
+                                    // Check if the problem hasn't yet been solved
+                                    if(found.grader.problemsSolved.indexOf(doc.pid) < 0) {
+                                        // Add this problem to solved problems
+                                        if (score != 0) {
+                                            found.grader.problemsSolved.push({pid: doc.pid, name: doc.name, points: score});
+                                            found.points += score;
+                                            // Save user
+                                            found.save();
+                                        }
+                                    } else {
+                                        found.grader.problemsSolved.forEach((val, index, arr) => {
+                                            if (val.pid === doc.pid) {
+                                                if (score > val.points) {
+                                                    found.points -= val.points;
+                                                    found.points += score;
+                                                    found.grader.problemsSolved[index] = {pid: doc.pid, points: score};
+                                                    found.save();
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+                            }
                         });
-                        if (!doc.partial) {
-                            doc.score = 0;
-                        }
                     }
-                    //TODO: points worked out here; score contains total score for this submission (counts partial vs no partial)
-                    User.findById(socket.request.session.passport.user, (err, found) => {
-                        // Check if the problem hasn't yet been solved
-                        if(found.grader.problemsSolved.indexOf(doc.pid) < 0) {
-
-
-                            // Add this problem to solved problems
-                            found.grader.problemsSolved.push(doc.pid);
-                            // Save user
-                            found.save();
-                        }
-                    });
+                    
                 } else {
                     // Error
                     console.log("Error");
