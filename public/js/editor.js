@@ -172,10 +172,10 @@ $('#result-modal').on("hidden.bs.modal", function (event) {
 $(document).ready(function () {
     // Sort the list of languages
     hrLanguages.languages.names = sortObj(hrLanguages.languages.names, "value");
-    
+
     // Add list of languages
     var count = 0;
-    for (key in hrLanguages.languages.names) {
+    for (var key in hrLanguages.languages.names) {
         // Selector for current column
         let selector;
         if (count < 14) {
