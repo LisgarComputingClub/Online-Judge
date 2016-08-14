@@ -4,8 +4,8 @@ socket.on("connect", function () {
 });
 
 // Get submission status
-socket.on("submission-status", function(data) {
-    switch(data) {
+socket.on("submission-status", function (data) {
+    switch (data) {
         case "received":
             $("#submission-status").text("Looking up problem in database...");
             break;
@@ -22,7 +22,7 @@ socket.on("submission-status", function(data) {
 });
 
 // Display code results
-socket.on("submission-results", function(data) {
+socket.on("submission-results", function (data) {
     var results = data.results;
     var message = data.message;
     var time = data.time;
@@ -34,7 +34,7 @@ socket.on("submission-results", function(data) {
         $("div.modal-body").append('<ul id="results-list">');
 
         // Add results to the list
-        results.forEach(function(val, index, arr) {
+        results.forEach(function (val, index, arr) {
             if (val === true) {
                 $("#results-list").append("<li>[" + time[index] + "s] <div class=\"result-correct\">Correct</div></li>");
             } else if (val) {
@@ -52,7 +52,7 @@ socket.on("submission-results", function(data) {
         // End the list
         $("div.modal-body").append("</ul>");
     }
-    
+
     // Add a close button
     $("div.modal-content").append('<div id="result-footer" class="modal-footer"><button id="results-button" type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>');
 });
@@ -142,7 +142,7 @@ $(document).on("click", ".set-lang", function (event) {
 });
 
 // Submit code
-$("#submit-button").click(function() {
+$("#submit-button").click(function () {
     // Open the submission modal
     $("#result-modal").modal({
         backdrop: false,
@@ -161,7 +161,7 @@ $("#submit-button").click(function() {
 });
 
 // Fires when the results modal closes
-$('#result-modal').on("hidden.bs.modal", function(event) {
+$('#result-modal').on("hidden.bs.modal", function (event) {
     // Clear the results modal
     $("#submission-status").text("Sending code to server...");
     $("#results-list").remove();
@@ -169,15 +169,18 @@ $('#result-modal').on("hidden.bs.modal", function(event) {
 });
 
 // Fires when the page has loaded
-$(document).ready(function() {
+$(document).ready(function () {
+    // Sort the list of languages
+    hrLanguages.languages.names = sortObj(hrLanguages.languages.names, "value");
+    
     // Add list of languages
     var count = 0;
-    for(key in hrLanguages.languages.names) {
+    for (key in hrLanguages.languages.names) {
         // Selector for current column
         let selector;
-        if(count < 15) {
+        if (count < 14) {
             selector = "#allowed-languages-left";
-        } else if(count < 29) {
+        } else if (count < 28) {
             selector = "#allowed-languages-centre";
         } else {
             selector = "#allowed-languages-right";
@@ -198,11 +201,11 @@ $(document).ready(function() {
 });
 
 // Select all and none allowed languages
-$("#allowed-languages-control-select-all").click(function() {
+$("#allowed-languages-control-select-all").click(function () {
     $(".allowed-languages-checkbox").bootstrapToggle("on");
 });
 
-$("#allowed-languages-control-select-none").click(function() {
+$("#allowed-languages-control-select-none").click(function () {
     $(".allowed-languages-checkbox").bootstrapToggle("off");
 });
 
@@ -229,7 +232,40 @@ function getKeyByValue(obj, value) {
 // Other
 
 String.prototype.trunc = function(n) {
-    return this.substr(0,n-1)+(this.length>n?'&hellip;':'');
+    return this.substr(0, n - 1) + (this.length > n ? '&hellip;' : '');
+};
+
+// Sort an object
+function sortObj(obj, type, caseSensitive) {
+    var temp_array = [];
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            if (!caseSensitive) {
+                key = (key['toLowerCase'] ? key.toLowerCase() : key);
+            }
+            temp_array.push(key);
+        }
+    }
+    if (typeof type === 'function') {
+        temp_array.sort(type);
+    } else if (type === 'value') {
+        temp_array.sort(function (a, b) {
+            var x = obj[a];
+            var y = obj[b];
+            if (!caseSensitive) {
+                x = (x['toLowerCase'] ? x.toLowerCase() : x);
+                y = (y['toLowerCase'] ? y.toLowerCase() : y);
+            }
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        });
+    } else {
+        temp_array.sort();
+    }
+    var temp_obj = {};
+    for (var i = 0; i < temp_array.length; i++) {
+        temp_obj[temp_array[i]] = obj[temp_array[i]];
+    }
+    return temp_obj;
 };
 
 // HackerRank's languages list
