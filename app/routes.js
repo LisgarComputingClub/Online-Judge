@@ -133,6 +133,14 @@ module.exports = function (app, passport, express) {
         }
     });
 
+    app.get("/submission", isLoggedIn, (req, res) => {
+        if (!req.query.sid) {
+            res.redirect("/submissions");
+        } else {
+            res.render("pages/protected/submission.ejs", { user: req.user, sid: req.query.sid });
+        }
+    });
+
     // Problem editor
     app.get("/create", isLoggedIn, (req, res) => {
         // Check if a problem ID was specified

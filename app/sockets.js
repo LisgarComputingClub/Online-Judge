@@ -10,6 +10,8 @@ var exists = require("simple-exist");
 var User = require("./models/user.js");
 // Problems model
 var Problem = require("./models/problem.js");
+// Submissions model
+var Submission = require("./models/submission.js");
 // Comments model
 var Comment = require("./models/comment.js");
 
@@ -131,25 +133,7 @@ module.exports = function (io, sessionMiddleware) {
                         name: doc.google.name,
                         grader: doc.grader
                     };
-                    // Check if the user has solved problems
-                    if(doc.grader.problemsSolved.length > 0) {
-                        // Loop through solved problems
-                        var count = 0;
-                        doc.grader.problemsSolved.forEach((val, index, arr) => {
-                            Problem.findOne({ pid: val }, (err, problem) => {
-                                userObj.grader.problemsSolved[index] = problem;
-                                count++;
-                                if(count >= doc.grader.problemsSolved.length) {
-                                    // Send the user info to the socket
-                                    socket.emit("profile-response", userObj);
-                                }
-                            });
-                        });
-                    } else {
-                        // Send the user info to the socket
-                        socket.emit("profile-response", userObj);
-                    }
-                    
+                    socket.emit("profile-response", userObj);                   
                 } else {
                     // The user doesn't exist, redirect the user
                     socket.emit("redirect", "/users");
@@ -207,27 +191,42 @@ module.exports = function (io, sessionMiddleware) {
 
                                 //TODO: points worked out here; score contains total score for this submission (counts partial vs no partial)
                                 User.findById(socket.request.session.passport.user, (err, found) => {
-                                    // Check if the problem hasn't yet been solved
-                                    if(found.grader.problemsSolved.indexOf(doc.pid) < 0) {
+                                    var i = -1;
+                                    for (var j = 0; j < found.grader.problemsSolved.length; j++) {
+                                        if (found.grader.problemsSolved[j].pid === submissionDoc.pid) {
+                                            i = j;
+                                            break;
+                                        }
+                                    }
+
+                                    var d = new Date();
+                                    var s = new Submission({
+                                        sid: Math.round(Math.random() * 100000),
+                                        pid: doc.pid,
+                                        author: found.grader.username,
+                                        creation: d,
+                                        status: "test",
+                                        points: score,
+                                        code: data.code,
+                                        language: data.lang
+                                    });
+
+                                    s.save();
+                                    if(i < 0) {
                                         // Add this problem to solved problems
                                         if (score != 0) {
-                                            found.grader.problemsSolved.push({pid: doc.pid, name: doc.name, points: score});
-                                            found.points += score;
+                                            found.grader.problemsSolved.push({sid: s.sid, pid: doc.pid, name: doc.name, points: score, maxpoints: doc.points});
+                                            found.grader.points += score;
                                             // Save user
                                             found.save();
                                         }
                                     } else {
-                                        found.grader.problemsSolved.forEach((val, index, arr) => {
-                                            if (val.pid === doc.pid) {
-                                                if (score > val.points) {
-                                                    found.points -= val.points;
-                                                    found.points += score;
-                                                    found.grader.problemsSolved[index] = {pid: doc.pid, points: score};
-                                                    found.save();
-                                                }
-                                            }
-                                        });
+                                        found.grader.points -= val.points;
+                                        found.grader.points += score;
+                                        found.grader.problemsSolved[i] = {sid: s.sid, pid: doc.pid, points: score, maxpoints: doc.points};
+                                        found.save();
                                     }
+                                    
                                 });
                             }
                         });
@@ -237,6 +236,35 @@ module.exports = function (io, sessionMiddleware) {
                     // Error
                     console.log("Error");
                 }
+            });
+        });
+
+        socket.on("submission-request", (data) => {
+            console.log("request received for " + data);
+            Submission.findOne({sid: data}, (err, submissionDoc) => {
+                if (err) {
+                    console.log(err);
+                }
+                User.findById(socket.request.session.passport.user, (err, userDoc) => {
+                    var i = -1;
+                    for (var j = 0; j < userDoc.grader.problemsSolved.length; j++) {
+                        if (userDoc.grader.problemsSolved[j].pid === submissionDoc.pid) {
+                            i = j;
+                            break;
+                        }
+                    }
+                    if (i >= 0) {
+                        Problem.findOne({pid: submissionDoc.pid}, (err, problemDoc) => {
+                            if (problemDoc.points == userDoc.grader.problemsSolved[i].points || submissionDoc.author == userDoc.grader.username) {
+                                socket.emit("submission-response", submissionDoc);        
+                            } else {
+                                socket.emit("submission-response", "unauth");
+                            }
+                        });
+                    } else {
+                        socket.emit("submission-response", "unauth");
+                    }
+                });                
             });
         });
 

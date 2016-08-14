@@ -3,6 +3,7 @@ var mongoose = require("mongoose");
 
 // Submission schema 
 var submissionSchema = mongoose.Schema({
+	sid: Number,
     pid: String,
     author: String,
     creation: Date,

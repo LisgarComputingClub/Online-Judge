@@ -8,7 +8,7 @@ socket.on("profile-response", function(data) {
     console.log(data);
     // Fill in the profile info
     $("#profile-name").text(data.name);
-    $("#profile-points").text(data.grader.points + " points")
+    $("#profile-points").text(data.grader.points.toFixed(2) + " points")
     if(data.grader.age) {
         $("#profile-age").text(data.grader.age);
     } else {
@@ -33,7 +33,8 @@ socket.on("profile-response", function(data) {
     if(data.grader.problemsSolved.length > 0) {
         $("#solved-problems").append('<ul id="solved-problems-list">')
         data.grader.problemsSolved.forEach(function(val, index, arr) {
-            $("#solved-problems-list").append('<li><a href="/problem?pid=' + val.pid + '">' + val.name + '</a></li>');
+            $("#solved-problems-list").append(
+                '<li><a href="/problem?pid=' + val.pid + '">' + val.name + '</a> (<a href="/submission?sid=' + val.sid + '">' + val.points.toFixed(2) + '/' + val.maxpoints + '</a>)</li>');
         });
         $("#solved-problems").append("</ul>");
     } else {

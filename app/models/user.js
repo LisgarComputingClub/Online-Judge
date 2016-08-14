@@ -16,9 +16,11 @@ var userSchema = mongoose.Schema({
         points: Number,
         problemsSolved: [
             {
+                sid: String,
                 pid: String, 
                 name: String,
-                points: Number
+                points: Number,
+                maxpoints: Number
             }
         ],
         school: String,

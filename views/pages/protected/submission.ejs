@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Submission - LCC Online Judge</title>
+    <meta charset="utf-8">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <!-- Global custom styles -->
+    <link rel="stylesheet" href="/css/main.css">
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="/css/problem.css">
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- Header include -->
+        <%- include("../../partials/protected/header.ejs", { pageName: "submission" }); %>
+
+            <!-- Content -->
+            <div class="jumbotron">
+                <h3 id="submission-name" class="text-center">Loading submission...</h1>
+                <hr>
+                <div class="row">
+
+                    <!-- Problem info -->
+                    <div class="col-sm-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 id="submission-info" class="text-center">Loading submission...</h4>
+                            </div>
+                            <div id="submission-text" class="panel-body">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Comments -->
+                
+            </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="/jquery-3.1.0.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <!-- List.js -->
+    <script src="/js/list.min.js"></script>
+    <!-- Socket.io -->
+    <script src="http://localhost:8081/socket.io/socket.io.js"></script>
+    <script src="/js/socket.io/index.js"></script>
+    <!-- MathJax -->
+    <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <!-- Ace -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.4/ace.js" type="text/javascript" charset="utf-8"></script>
+    <!-- Marked -->
+    <script src="/marked.min.js"></script>
+    <!-- MathJax configuration -->
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [['$','$'], ['\\(','\\)']],
+            displayMath: [['$$','$$'], ['\[','\]']],
+            processEscapes: true,
+            processEnvironments: true,
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+            TeX: { equationNumbers: { autoNumber: "AMS" },
+                extensions: ["AMSmath.js", "AMSsymbols.js"] }
+        }
+        });
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Queue(function() {
+            // Fix <code> tags after MathJax finishes running. This is a
+            // hack to overcome a shortcoming of Markdown. Discussion at
+            // https://github.com/mojombo/jekyll/issues/199
+            var all = MathJax.Hub.getAllJax(), i;
+            for(i = 0; i < all.length; i += 1) {
+                all[i].SourceElement().parentNode.className += ' has-jax';
+            }
+        });
+    </script>
+    <!-- Problem ID -->
+    <script>
+        var sid = "<%= sid %>";
+    </script>
+    <!-- Problem list scripts -->
+    <script src="/js/submission.js"></script>
+    <!-- Comments scripts -->
+</body>
+
+</html>
