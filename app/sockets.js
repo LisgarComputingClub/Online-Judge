@@ -172,27 +172,35 @@ module.exports = function (io, sessionMiddleware) {
                 if (typeof doc != "undefined") {
                     // Tell the client that we found the problem in the database
                     socket.emit("submission-status", "found");
-                    // Run code through HackerRank
-                    HackerRank.evaluateCode(data.code, data.lang, doc.testcases.input, doc.testcases.output, (res) => {
-                        // Check if the user already solved the problem
-                        User.findById(socket.request.session.passport.user, (err, found) => {
-                            // Check if the problem hasn't yet been solved
-                            if(found.grader.problemsSolved.indexOf(doc.pid) < 0) {
-                                // Add points
-                                if(doc.partial) {
-                                    // TODO
-                                } else {
-                                    found.grader.points += doc.points;
-                                }
-                                // Add this problem to solved problems
-                                found.grader.problemsSolved.push(doc.pid);
-                                // Save user
-                                found.save();
+
+                    var num_eval = 0;
+                    var score = 0;
+                    socket.emit("submission-status", "evaluated");
+                    for (num_eval = 0; num_eval < doc.testcases.input.length; num_eval++) {
+                        // Run code through HackerRank
+                        HackerRank.evaluateCode(data.code, data.lang, doc.testcases.input.slice(num_eval, num_eval + 1), doc.testcases.output.slice(num_eval, num_eval + 1), (res) => {
+                            if (res.results[0] === true) {
+                                score += doc.testcases.weight[num_eval] * doc.points;
                             }
+                            console.log(res);
+                            // Send the results to the client
+                            socket.emit("submission-results", res);
                         });
-                        // Send the results to the client
-                        socket.emit("submission-status", "evaluated");
-                        socket.emit("submission-results", res);
+                        if (!doc.partial) {
+                            doc.score = 0;
+                        }
+                    }
+                    //TODO: points worked out here; score contains total score for this submission (counts partial vs no partial)
+                    User.findById(socket.request.session.passport.user, (err, found) => {
+                        // Check if the problem hasn't yet been solved
+                        if(found.grader.problemsSolved.indexOf(doc.pid) < 0) {
+
+
+                            // Add this problem to solved problems
+                            found.grader.problemsSolved.push(doc.pid);
+                            // Save user
+                            found.save();
+                        }
                     });
                 } else {
                     // Error
