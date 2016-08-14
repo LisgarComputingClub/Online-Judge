@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Problem Editor - LCC Online Judge</title>
+    <meta charset="utf-8">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <!-- X-editable -->
+    <link rel="stylesheet" href="/bootstrap-editable/css/bootstrap-editable.css">
+    <!-- SimpleMDE -->
+    <link rel="stylesheet" href="/simplemde/simplemde.min.css">
+    <!-- Bootstrap-toggle -->
+    <link rel="stylesheet" href="/bootstrap-toggle/css/bootstrap-toggle.min.css"> 
+    <!-- Global custom styles -->
+    <link rel="stylesheet" href="/css/main.css">
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="/css/editor.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Header include -->
+        <%- include("../../partials/protected/header.ejs", { pageName: "create" }); %>
+
+        <!-- Content -->
+        <div class="jumbotron">
+            <h1 id="problem-name" class="text-center"><a href="#" id="problem-name-edit" data-type="text" data-title="Enter your problem's name">Loading problem...</a></h1>
+            <hr>
+
+            <!-- Info and help -->
+            <div class="row">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="text-center">Problem Editor Guidelines and Tips</h4>
+                        </div>
+                        <div class="panel-body">
+                            <ul>
+                                <li>Keep everything appropriate and professional.</li>
+                                <li>Use proper grammar.</li>
+                                <li>Your problem requires a valid solution for your testcases. It can be written in any language.</li>
+                                <li>If you want to use images, use a reliable, safe image host such as <a href="https://imgur.com">Imgur</a>.</li>
+                                <li>TeX math can be used by putting it inbetween <span class="tex2jax_ignore">`$ and $`</span>.
+                                    For example: <span class="tex2jax_ignore">`$ a + b = c $`</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem statement editor -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="text-center">Problem Statement</h4>
+                        </div>
+                        <div class="panel-body">
+                            <textarea id="problem-statement-edit"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Solution editor -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="text-center">Solution Editor</h4>
+                        </div>
+                        <div class="panel-body">
+                            <!-- Editor controls -->
+                            <div class="row">
+                                <!-- Languages dropdown -->
+                                <div class="col-sm-6">
+                                    <div class="dropdown">
+                                        <button class="btn btn-default dropdown-toggle" id="lang-button" type="button" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            Loading languages...
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" id="lang-dropdown-list" aria-labelledby="lang-button">
+                                            <li>Loading languages...</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Submit button -->
+                                <div class="col-sm-2 col-sm-offset-4">
+                                    <button class="btn btn-success pull-right" id="submit-button">Submit Code</button>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <!-- Editor -->
+                                    <pre id="editor"></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Allowed languages -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="text-center">Allowed Languages</h4>
+                        </div>
+                        <div class="panel-body">
+
+                            <!-- Controls -->
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <button id="allowed-languages-control-select-all" class="allowed-languages-control-button btn btn-default" disabled>Select All</button>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button id="allowed-languages-control-select-none" class="allowed-languages-control-button btn btn-default" disabled>Select None</button>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <!-- List of languages -->
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <form id="allowed-languages-left"></form>
+                                </div>
+                                <div class="col-sm-4">
+                                    <form id="allowed-languages-centre"></form>
+                                </div>
+                                <div class="col-sm-4">
+                                    <form id="allowed-languages-right"></form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results modal -->
+    <div class="modal fade" id="result-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Publishing Problem...</h2>
+                </div>
+                <div class="modal-body">
+                    <h4 class="text-center" id="submission-status">Sending code to server...</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="/jquery-3.1.0.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <!-- X-editable -->
+    <script src="/bootstrap-editable/js/bootstrap-editable.min.js"></script>
+    <!-- Socket.io -->
+    <script src="http://localhost:8081/socket.io/socket.io.js"></script>
+    <script src="/js/socket.io/index.js"></script>
+    <!-- MathJax -->
+    <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <!-- Ace -->
+    <script src="/js/ace/ace.js"></script>
+    <!-- Bootstrap-toggle -->
+    <script src="/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+    <!-- SimpleMDE -->
+    <script src="/simplemde/simplemde.min.js"></script>
+    <!-- Initialize SimpleMDE -->
+    <script>
+        var simplemde = new SimpleMDE();
+    </script>
+    <!-- Marked -->
+    <script src="/marked.min.js"></script>
+    <!-- MathJax -->
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax configuration -->
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [['$','$'], ['\\(','\\)']],
+            displayMath: [['$$','$$'], ['\[','\]']],
+            processEscapes: true,
+            processEnvironments: true,
+            ignoreClass: "tex2jax_ignore",
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+            TeX: { equationNumbers: { autoNumber: "AMS" },
+                extensions: ["AMSmath.js", "AMSsymbols.js"] }
+        }
+        });
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Queue(function() {
+            // Fix <code> tags after MathJax finishes running. This is a
+            // hack to overcome a shortcoming of Markdown. Discussion at
+            // https://github.com/mojombo/jekyll/issues/199
+            var all = MathJax.Hub.getAllJax(), i;
+            for(i = 0; i < all.length; i += 1) {
+                all[i].SourceElement().parentNode.className += ' has-jax';
+            }
+        });
+    </script>
+    <!-- Problem ID -->
+    <script>
+            var pid = "<%= pid %>";
+        </script>
+    <!-- Problem list scripts -->
+    <script src="/js/editor.js"></script>
+</body>
+
+</html>

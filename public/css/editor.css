@@ -1,0 +1,48 @@
+#problem-statement p {
+    font-size: 20px;
+}
+
+#editor {
+    height: 500px;
+}
+
+.result-correct {
+	display: inline;
+    color: mediumseagreen;
+    font-weight: bold;
+}
+
+.result-wrong {
+	display: inline;
+    color: red;
+    font-weight: bold;
+}
+
+.result-err {
+	display: inline;
+    color: orange;
+    font-weight: bold;
+}
+
+.result-tle {
+	display: inline;
+	color: gray;
+	font-weight: bold;
+}
+
+/* Problem statement editor */
+#problem-statement-edit, #problem-statement-preview {
+    width: 100%;
+}
+
+#problem-statement-edit {
+    height: 300px;
+}
+
+.editor-toolbar {
+    background-color: white;
+}
+
+.allowed-languages-control-button {
+    width: 100%;
+}
