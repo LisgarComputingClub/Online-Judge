@@ -38,6 +38,7 @@
 .MathJax {
     position: relative;
     display: inline-block ! important;
-    background-color: white;
+    background-color: #303030;
     border-radius: 5px;
+    color: white;
 }
