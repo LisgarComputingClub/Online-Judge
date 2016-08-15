@@ -3,6 +3,7 @@
     <nav>
         <ul class="nav nav-pills pull-right">
             <li role="presentation" <% if(pageName == "users") { %>class="active"<% } %>><a href="/users">Users</a></li>
+            <li role="presentation" <% if(pageName == "submissions") { %>class="active"<% } %>><a href="/submissions">Submissions</a></li>
             <li role="presentation" class="dropdown<% if(pageName == "problems" || pageName == "create") { %> active<% } %>">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Problems <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">

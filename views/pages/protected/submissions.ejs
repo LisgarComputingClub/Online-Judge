@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Problems - LCC Online Judge</title>
+    <meta charset="utf-8">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <!-- Global custom styles -->
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- Header include -->
+        <%- include("../../partials/protected/header.ejs", { pageName: "submissions" }); %>
+
+        <!-- Content -->
+        <div class="jumbotron">
+            <h1 class="text-center">Submissions</h1>
+            <hr>
+            <div class="row">
+
+                <!-- List of problems -->
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="text-center">All Submissions</h3>
+                        </div>
+                        <div class="panel-body">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Scripts -->
+        <!-- jQuery -->
+        <script src="/jquery-3.1.0.min.js"></script>
+        <!-- Bootstrap -->
+        <script src="/bootstrap/js/bootstrap.min.js"></script>
+        <!-- List.js -->
+        <script src="/js/list.min.js"></script>
+        <!-- Socket.io -->
+        <script src="http://localhost:8081/socket.io/socket.io.js"></script>
+        <script src="/js/socket.io/index.js"></script>
+        <!-- Problem list scripts -->
+        <script src="/js/submissions.js"></script>
+</body>
+
+</html>

@@ -141,6 +141,14 @@ module.exports = function (app, passport, express) {
         }
     });
 
+    app.get("/submissions", isLoggedIn, (req, res) => {
+        if (!req.query.sid) {
+            res.render("pages/protected/submissions.ejs", { user: req.user, page: 0 });
+        } else {
+            res.render("pages/protected/submissions.ejs", { user: req.user, page: parseInt(req.query.sid, 10) });
+        }
+    });
+
     // Problem editor
     app.get("/create", isLoggedIn, (req, res) => {
         // Check if a problem ID was specified

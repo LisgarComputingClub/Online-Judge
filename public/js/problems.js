@@ -6,6 +6,10 @@ var options = {
 // Initialize the list
 var problemList = new List("problems-table-wrapper", options);
 
+if (connected) {
+    socket.emit("problems-request");
+}
+
 // Request the list of problems when connected
 socket.on("connect", function() {
     socket.emit("problems-request");
