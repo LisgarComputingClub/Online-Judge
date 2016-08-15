@@ -37,20 +37,23 @@ exists.exists("languages.json", (data) => {
 });
 
 function getNextSequence(name) {
-    Counter.findOne({_id: name}, (err, doc) => {
-        if (err) {
-            console.log(err);
+    Counter.findById(name, (err, doc) => {
+        if (typeof doc == "undefined") {
+            var c = new Counter({
+                _id: name,
+                seq: 1
+            });
+            c.save();
         } else {
-            doc.seq++;
-            doc.save();
-            return doc.seq;
+            if (err) {
+                console.log(err);
+            } else {
+                doc.seq++;
+                doc.save();
+                return doc.seq;
+            }
         }
     });
-    var c = new Counter({
-        _id: name,
-        seq: 0
-    });
-    c.save();
     return 0;
 }
 
@@ -230,7 +233,7 @@ module.exports = function (io, sessionMiddleware) {
                                         code: data.code,
                                         language: data.lang
                                     });
-
+                                    console.log(s.sid);
                                     s.save();
                                     if(i < 0) {
                                         // Add this problem to solved problems
@@ -241,7 +244,7 @@ module.exports = function (io, sessionMiddleware) {
                                             found.save();
                                         }
                                     } else {
-                                        found.grader.points -= problemsSolved[i].points;
+                                        found.grader.points -= found.grader.problemsSolved[i].points;
                                         found.grader.points += score;
                                         found.grader.problemsSolved[i] = {sid: s.sid, pid: doc.pid, name: doc.name, points: score, maxpoints: doc.points};
                                         found.save();
