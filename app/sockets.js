@@ -14,6 +14,8 @@ var Problem = require("./models/problem.js");
 var Submission = require("./models/submission.js");
 // Comments model
 var Comment = require("./models/comment.js");
+// Counter model
+var Counter = require("./models/counter.js");
 
 // Get languages
 var languages;
@@ -33,6 +35,24 @@ exists.exists("languages.json", (data) => {
         console.log(colours.error("Error getting languages. Try running the server again."));
     }
 });
+
+function getNextSequence(name) {
+    Counter.findOne({_id: name}, (err, doc) => {
+        if (err) {
+            console.log(err);
+        } else {
+            doc.seq++;
+            doc.save();
+            return doc.seq;
+        }
+    });
+    var c = new Counter({
+        _id: name,
+        seq: 0
+    });
+    c.save();
+    return 0;
+}
 
 module.exports = function (io, sessionMiddleware) {
 
@@ -193,7 +213,7 @@ module.exports = function (io, sessionMiddleware) {
                                 User.findById(socket.request.session.passport.user, (err, found) => {
                                     var i = -1;
                                     for (var j = 0; j < found.grader.problemsSolved.length; j++) {
-                                        if (found.grader.problemsSolved[j].pid === submissionDoc.pid) {
+                                        if (found.grader.problemsSolved[j].pid === doc.pid) {
                                             i = j;
                                             break;
                                         }
@@ -201,7 +221,7 @@ module.exports = function (io, sessionMiddleware) {
 
                                     var d = new Date();
                                     var s = new Submission({
-                                        sid: Math.round(Math.random() * 100000),
+                                        sid: getNextSequence("submissionCounter"),
                                         pid: doc.pid,
                                         author: found.grader.username,
                                         creation: d,
@@ -221,9 +241,9 @@ module.exports = function (io, sessionMiddleware) {
                                             found.save();
                                         }
                                     } else {
-                                        found.grader.points -= val.points;
+                                        found.grader.points -= problemsSolved[i].points;
                                         found.grader.points += score;
-                                        found.grader.problemsSolved[i] = {sid: s.sid, pid: doc.pid, points: score, maxpoints: doc.points};
+                                        found.grader.problemsSolved[i] = {sid: s.sid, pid: doc.pid, name: doc.name, points: score, maxpoints: doc.points};
                                         found.save();
                                     }
                                     
