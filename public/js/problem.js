@@ -100,12 +100,13 @@ socket.on("problem-response", function (problem) {
     // Set the current language
     curLang = dropdown[0];
 
-    // Set the editor language
-    editor.getSession().setMode("ace/mode/" + dropdown[0].lang);
+    if (editor != undefined) {
+        // Set the editor language
+        editor.getSession().setMode("ace/mode/" + curLang.lang);
 
-    // Set the dropdown button text
-    $("#lang-button").html(dropdown[0].name + ' <span class="caret"></span>');
-
+        // Set the dropdown button text
+        $("#lang-button").html(curLang.name + ' <span class="caret"></span>');
+    }
     // Retrigger MathJax
     MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
 });
@@ -115,37 +116,51 @@ var dropdown = [];
 
 // Current language
 var curLang;
+var editor;
 
-// Problem editor
-var editor = ace.edit("editor");
-ace.require("ace/ext/language_tools");
+$.getScript('//cdnjs.cloudflare.com/ajax/libs/ace/1.2.4/ace.js',function(){
+  $.getScript('//cdnjs.cloudflare.com/ajax/libs/ace/1.2.4/ext-language_tools.js',function(){
+  
+        ace.require("ace/ext/language_tools");
+        editor = ace.edit("editor");
+        // Preferences
+        editor.setOptions({
+            useWrapMode: true,
+            highlightActiveLine: true,
+            showPrintMargin: false,
+            theme: 'ace/theme/cobalt',
+            mode: 'ace/mode/javascript',
+            basicBasicAutocompletion: true,
+            enableSnippets: true,
+            enableLiveAutocompletion: true
+        });
 
-// Preferences
-editor.setOptions({
-    useWrapMode: true,
-    highlightActiveLine: true,
-    showPrintMargin: false,
-    theme: 'ace/theme/cobalt',
-    mode: 'ace/mode/javascript',
-    basicBasicAutocompletion: true,
-    enableSnippets: true,
-    enableLiveAutocompletion: true
+        if (curLang != undefined) {
+            // Set the editor language
+          //  editor.getSession().setMode("ace/mode/" + curLang.mode);
+            //alert(curLang.lang);
+            // Set the dropdown button text
+            $("#lang-button").html(curLang.name + ' <span class="caret"></span>');
+        }
+    });
 });
 
 // Change language
 $(document).on("click", ".set-lang", function (event) {
-    // Set the current language
-    curLang = {
-        name: $(this).data("name"),
-        code: $(this).data("code"),
-        lang: $(this).data("lang")
-    };
+    if (editor != undefined) {
+        // Set the current language
+        curLang = {
+            name: $(this).data("name"),
+            code: $(this).data("code"),
+            lang: $(this).data("lang")
+        };
+        console.log(curLang);
+        // Set the editor language
+        editor.getSession().setMode("ace/mode/" + $(this).data("lang"));
 
-    // Set the editor language
-    editor.getSession().setMode("ace/mode/" + $(this).data("name"));
-
-    // Set the dropdown button text
-    $("#lang-button").html($(this).data("name") + ' <span class="caret"></span>');
+        // Set the dropdown button text
+        $("#lang-button").html($(this).data("name") + ' <span class="caret"></span>');
+    }
 });
 
 // Submit code
@@ -158,7 +173,7 @@ $("#submit-button").click(function() {
 
     // Create the code object
     var code = {
-        code: '#include <iostream>\n using namespace std; int main() { cout << "hello world" << endl; }',//editor.getValue(),
+        code: editor.getValue(),
         lang: curLang.code,
         pid: pid
     };
