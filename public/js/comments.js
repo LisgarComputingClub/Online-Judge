@@ -40,7 +40,7 @@ socket.on("comments-response", function (data) {
             newComment += ' <button data-id="' + val._id + '" id="comment-delete-button" class="btn btn-success pull-right">Delete</button>';
             newComment += ' <button data-id="' + val._id + '" id="comment-edit-button" class="btn btn-success pull-right">Edit</button>';
         }
-        newComment += '</h4><p class="list-group-item-text">' + val.content + '</p></li>';
+        newComment += '</h4><div style="overflow: auto;" data-id="' + val._id + '"><p class="list-group-item-text">' + val.content + '</p></div></li>';
         $("#comments-list").append(newComment);
     });
 });
@@ -55,7 +55,6 @@ socket.on("comment-delete-response", function(data) {
         pid: pid
     });
 });
-
 // Ensure comments are loaded
 var commentsLoaded = false;
 
@@ -87,17 +86,16 @@ $("#comment-error").hide();
 
 
 $(document).on('click', '#comment-edit-button', function() {
-   alert("TODO");
+   var d = $("div[data-id*=" + $(this).data("id") + "]");
+   d.html('<textarea data-default="' + $("div[data-id*=" + $(this).data("id") + "] p:first").text() + '"id="comment-form" class="form-control">' + $("div[data-id*=" + $(this).data("id") + "] p:first").text() + '</textarea><br><button id="edit-cancel-button" class="btn btn-success pull-right">Cancel</button><button id="edit-save-button" class="btn btn-success pull-right">Save</button>');
 });
 
-$(document).on('click', '#comment-delete-button', function() {    
-    console.log("Emitting request for " + $(this).data("id"));
+$(document).on('click', '#comment-delete-button', function() {
     socket.emit("comment-delete-request", $(this).data("id"));
 });
 
-$("#comment-delete-button").click(function() {
-    console.log("Emitting request for " + $(this).data("id"));
-    socket.emit("comment-delete-request", $(this).data("id"));
+$(document).on('click', '#edit-cancel-button', function() {
+    $(this).parent().html('<p class="list-group-item-text">' + $(this).parent().children().eq(0).data("default") + '</p>');
 });
 
 // Get comment submissions
