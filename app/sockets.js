@@ -343,5 +343,24 @@ module.exports = function (io, sessionMiddleware) {
                 });
             }
         });
+
+        socket.on("comment-delete-request", (data) => {
+            Comment.findById(data, (err, commentDoc) => {
+                if (err) {
+                    console.log(err);
+                    socket.emit("comment-delete-response", false);
+                } else {
+                    User.findById(socket.request.session.passport.user, (err, userDoc) => {
+                        if (err) {
+                            console.log(err);
+                            socket.emit("comment-delete-response", false);
+                        } else if (userDoc.grader.username === commentDoc.author) {
+                            commentDoc.remove();
+                            socket.emit("comment-delete-response", true);
+                        }
+                    });
+                }
+            });
+        });
     });
 };

@@ -70,7 +70,7 @@
                 <hr>
 
                 <!-- Comments -->
-                <%- include("../../partials/protected/comments.ejs", { type: "problem" }); %>
+                <%- include("../../partials/protected/comments.ejs", { username: user.grader.username, type: "problem" }); %>
             </div>
 
             <!-- Results modal -->
@@ -134,8 +134,8 @@
     </script>
     <!-- Problem ID -->
     <script>
-            var pid = "<%= pid %>";
-        </script>
+        var pid = "<%= pid %>";
+    </script>
     <!-- Problem list scripts -->
     <script src="/js/problem.js"></script>
     <!-- Comments scripts -->
