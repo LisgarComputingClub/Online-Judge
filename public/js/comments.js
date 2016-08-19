@@ -84,6 +84,12 @@ $("#comment-error").hide();
 // Submit comments
 // ===============
 
+$("div[data-id*=" + $(this).data("id") + "] p:first").editable({
+   type: 'text',
+   pk: 1,
+   url: '/post',
+   title: 'Enter username'
+});
 
 $(document).on('click', '#comment-edit-button', function() {
    var d = $("div[data-id*=" + $(this).data("id") + "]");
