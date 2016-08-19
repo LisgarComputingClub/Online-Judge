@@ -38,7 +38,7 @@ exists.exists("languages.json", (data) => {
 
 function getNextSequence(name) {
     Counter.findById(name, (err, doc) => {
-        if (typeof doc == "undefined") {
+        if (typeof doc == "undefined" || doc == null) {
             var c = new Counter({
                 _id: name,
                 seq: 1
