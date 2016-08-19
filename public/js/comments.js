@@ -47,7 +47,7 @@ socket.on("comments-response", function (data) {
 
 socket.on("comment-delete-response", function(data) {
     if (data === false) {
-        console.log("Something went wrong, comment not deleted");
+        alert("Something went wrong, comment not deleted");
     }
     // Reload comments
     socket.emit("comments-request", {
@@ -55,6 +55,18 @@ socket.on("comment-delete-response", function(data) {
         pid: pid
     });
 });
+
+socket.on("comment-edit-response", function(data) {
+    if (data === false) {
+        alert("Something went wrong, comment not edited");
+    }
+    // Reload comments
+    socket.emit("comments-request", {
+        type: type,
+        pid: pid
+    });
+});
+
 // Ensure comments are loaded
 var commentsLoaded = false;
 
@@ -84,16 +96,9 @@ $("#comment-error").hide();
 // Submit comments
 // ===============
 
-$("div[data-id*=" + $(this).data("id") + "] p:first").editable({
-   type: 'text',
-   pk: 1,
-   url: '/post',
-   title: 'Enter username'
-});
-
 $(document).on('click', '#comment-edit-button', function() {
    var d = $("div[data-id*=" + $(this).data("id") + "]");
-   d.html('<textarea data-default="' + $("div[data-id*=" + $(this).data("id") + "] p:first").text() + '"id="comment-form" class="form-control">' + $("div[data-id*=" + $(this).data("id") + "] p:first").text() + '</textarea><br><button id="edit-cancel-button" class="btn btn-success pull-right">Cancel</button><button id="edit-save-button" class="btn btn-success pull-right">Save</button>');
+   d.html('<textarea data-default="' + $("div[data-id*=" + $(this).data("id") + "] p:first").text() + '"id="comment-form" class="form-control">' + $("div[data-id*=" + $(this).data("id") + "] p:first").text() + '</textarea><br><button id="edit-cancel-button" class="btn btn-success pull-right">Cancel</button><button id="edit-save-button" data-id="' + $(this).data("id") + '" class="btn btn-success pull-right">Save</button>');
 });
 
 $(document).on('click', '#comment-delete-button', function() {
@@ -101,6 +106,14 @@ $(document).on('click', '#comment-delete-button', function() {
 });
 
 $(document).on('click', '#edit-cancel-button', function() {
+    $(this).parent().html('<p class="list-group-item-text">' + $(this).parent().children().eq(0).data("default") + '</p>');
+});
+
+$(document).on('click', '#edit-save-button', function() {
+    socket.emit('comment-edit-request', {
+        id: $(this).data("id"),
+        text: $(this).parent().children().eq(0).val()
+    });
     $(this).parent().html('<p class="list-group-item-text">' + $(this).parent().children().eq(0).data("default") + '</p>');
 });
 

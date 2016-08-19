@@ -362,5 +362,28 @@ module.exports = function (io, sessionMiddleware) {
                 }
             });
         });
+
+        socket.on("comment-edit-request", (data) => {
+            Comment.findById(data.id, (err, commentDoc) => {
+                console.log(data);
+                console.log(commentDoc);
+                if (err) {
+                    console.log(err);
+                    socket.emit("comment-edit-response", false);
+                } else {
+                    User.findById(socket.request.session.passport.user, (err, userDoc) => {
+                        if (err) {
+                            console.log(err);
+                            socket.emit("comment-edit-response", false);
+                        } else if (userDoc.grader.username === commentDoc.author) {
+                            commentDoc.content = data.text;
+                            console.log(commentDoc.content);
+                            commentDoc.save();
+                            socket.emit("comment-edit-response", true);
+                        }
+                    });
+                }
+            })
+        });
     });
 };
