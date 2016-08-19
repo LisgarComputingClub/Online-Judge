@@ -365,9 +365,9 @@ module.exports = function (io, sessionMiddleware) {
 
         socket.on("comment-edit-request", (data) => {
             Comment.findById(data.id, (err, commentDoc) => {
-                console.log(data);
-                console.log(commentDoc);
-                if (err) {
+                if (commentDoc == null) {
+                    socket.emit("comment-edit-response", false);
+                } else if (err) {
                     console.log(err);
                     socket.emit("comment-edit-response", false);
                 } else {
