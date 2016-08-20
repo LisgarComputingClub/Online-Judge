@@ -8,13 +8,13 @@ socket.on("connect", function () {
 });
 
 // Get submission status
-socket.on("submission-status", function(data) {
+socket.on("submission-status", function (data) {
     if (typeof data == "number") {
         for (var i = 0; i < data; i++) {
-            $("#results-list").append("<li id=\"test-result-" + i.toString()  + "\">Case " + i.toString() + "</li>");
+            $("#results-list").append("<li id=\"test-result-" + i.toString() + "\">Case " + i.toString() + "</li>");
         }
     } else {
-        switch(data) {
+        switch (data) {
             case "received":
                 $("#submission-status").text("Looking up problem in database...");
                 break;
@@ -28,7 +28,7 @@ socket.on("submission-status", function(data) {
                 $("div.modal-body").append('<ul id="results-list">');
                 // End the list
                 $("div.modal-body").append("</ul>");
-        
+
                 // Add a close button
                 $("div.modal-content").append('<div id="result-footer" class="modal-footer"><button id="results-button" type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>');
                 break;
@@ -40,7 +40,7 @@ socket.on("submission-status", function(data) {
 });
 
 // Display code results
-socket.on("submission-results", function(data) {
+socket.on("submission-results", function (data) {
     var result = data.results[0];
     var message = data.message[0];
     var time = data.time[0];
@@ -52,14 +52,14 @@ socket.on("submission-results", function(data) {
         if (result === true) {
             $("#test-result-" + data.casen.toString()).html("<li>[" + time + "s] <div class=\"result-correct\">Correct</div></li>");
         } else if (result) {
-                //System error; SIGSEV, SIGABRT, compile error, etc.
-                $("#test-result-" + data.casen.toString()).html("<li><div class=\"result-err\">" + (message + ": " + val).trunc(80) + "</div></li>");
+            //System error; SIGSEV, SIGABRT, compile error, etc.
+            $("#test-result-" + data.casen.toString()).html("<li><div class=\"result-err\">" + (message + ": " + val).trunc(80) + "</div></li>");
         } else if (message == "Terminated due to timeout") {
-                $("#test-result-" + data.casen.toString()).html("<li>[" + time + "s] <div class=\"result-tle\">Time Limit Exceeded</div></li>");
+            $("#test-result-" + data.casen.toString()).html("<li>[" + time + "s] <div class=\"result-tle\">Time Limit Exceeded</div></li>");
         } else if (message == "Segmentation Fault") {
-                $("#test-result-" + data.casen.toString()).html("<li>[" + time + "s] <div class=\"result-err\">Segmentation Fault</div></li>");
+            $("#test-result-" + data.casen.toString()).html("<li>[" + time + "s] <div class=\"result-err\">Segmentation Fault</div></li>");
         } else {
-                $("#test-result-" + data.casen.toString()).html("<li>[" + time + "s] <div class=\"result-wrong\">Wrong Answer</div></li>");
+            $("#test-result-" + data.casen.toString()).html("<li>[" + time + "s] <div class=\"result-wrong\">Wrong Answer</div></li>");
         }
     }
 });
@@ -118,9 +118,9 @@ var dropdown = [];
 var curLang;
 var editor;
 
-$.getScript('//cdnjs.cloudflare.com/ajax/libs/ace/1.2.4/ace.js',function(){
-  $.getScript('//cdnjs.cloudflare.com/ajax/libs/ace/1.2.4/ext-language_tools.js',function(){
-  
+$.getScript('//cdnjs.cloudflare.com/ajax/libs/ace/1.2.4/ace.js', function () {
+    $.getScript('//cdnjs.cloudflare.com/ajax/libs/ace/1.2.4/ext-language_tools.js', function () {
+
         ace.require("ace/ext/language_tools");
         editor = ace.edit("editor");
         // Preferences
@@ -137,7 +137,7 @@ $.getScript('//cdnjs.cloudflare.com/ajax/libs/ace/1.2.4/ace.js',function(){
 
         if (curLang != undefined) {
             // Set the editor language
-          //  editor.getSession().setMode("ace/mode/" + curLang.mode);
+            //  editor.getSession().setMode("ace/mode/" + curLang.mode);
             //alert(curLang.lang);
             // Set the dropdown button text
             $("#lang-button").html(curLang.name + ' <span class="caret"></span>');
@@ -164,7 +164,7 @@ $(document).on("click", ".set-lang", function (event) {
 });
 
 // Submit code
-$("#submit-button").click(function() {
+$("#submit-button").click(function () {
     // Open the submission modal
     $("#result-modal").modal({
         backdrop: false,
@@ -183,7 +183,7 @@ $("#submit-button").click(function() {
 });
 
 // Fires when the results modal closes
-$('#result-modal').on("hidden.bs.modal", function(event) {
+$('#result-modal').on("hidden.bs.modal", function (event) {
     // Clear the results modal
     $("#submission-status").text("Sending code to server...");
     $("#results-list").remove();
@@ -212,10 +212,10 @@ function getKeyByValue(obj, value) {
 
 // Other
 
-String.prototype.trunc = 
-      function(n){
-          return this.substr(0,n-1)+(this.length>n?'&hellip;':'');
-      };
+String.prototype.trunc =
+    function (n) {
+        return this.substr(0, n - 1) + (this.length > n ? '&hellip;' : '');
+    };
 
 // HackerRank's languages list
 var hrLanguages = { "languages": { "names": { "c": "C", "cpp": "C++", "java": "Java", "csharp": "C#", "php": "PHP", "ruby": "Ruby", "python": "Python 2", "perl": "Perl", "haskell": "Haskell", "clojure": "Clojure", "scala": "Scala", "bash": "Bash", "lua": "Lua", "erlang": "Erlang", "javascript": "Javascript", "go": "Go", "d": "D", "ocaml": "OCaml", "pascal": "Pascal", "sbcl": "Common Lisp (SBCL)", "python3": "Python 3", "groovy": "Groovy", "objectivec": "Objective-C", "fsharp": "F#", "cobol": "COBOL", "visualbasic": "VB.NET", "lolcode": "LOLCODE", "smalltalk": "Smalltalk", "tcl": "Tcl", "whitespace": "Whitespace", "tsql": "T-SQL", "java8": "Java 8", "db2": "DB2", "octave": "Octave", "r": "R", "xquery": "XQuery", "racket": "Racket", "rust": "Rust", "fortran": "Fortran", "swift": "Swift", "oracle": "Oracle", "mysql": "MySQL" }, "codes": { "c": 1, "cpp": 2, "java": 3, "python": 5, "perl": 6, "php": 7, "ruby": 8, "csharp": 9, "mysql": 10, "oracle": 11, "haskell": 12, "clojure": 13, "bash": 14, "scala": 15, "erlang": 16, "lua": 18, "javascript": 20, "go": 21, "d": 22, "ocaml": 23, "r": 24, "pascal": 25, "sbcl": 26, "python3": 30, "groovy": 31, "objectivec": 32, "fsharp": 33, "cobol": 36, "visualbasic": 37, "lolcode": 38, "smalltalk": 39, "tcl": 40, "whitespace": 41, "tsql": 42, "java8": 43, "db2": 44, "octave": 46, "xquery": 48, "racket": 49, "rust": 50, "swift": 51, "fortran": 54 } } };
