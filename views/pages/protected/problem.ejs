@@ -38,32 +38,67 @@
                             </div>
                         </div>
 
-                        <!-- Editor controls -->
-                        <div class="row">
-                            <!-- Languages dropdown -->
-                            <div class="col-sm-6">
-                                <div class="dropdown">
-                                    <button class="btn btn-default dropdown-toggle" id="lang-button" type="button" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
-                                    Loading languages...
-                                    <span class="caret"></span>
-                                </button>
-                                    <ul class="dropdown-menu" id="lang-dropdown-list" aria-labelledby="lang-button">
-                                        <li>Loading languages...</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <!-- Submit button -->
-                            <div class="col-sm-2 col-sm-offset-4">
-                                <button class="btn btn-success pull-right" id="submit-button">Submit Code</button>
-                            </div>
+                        <!-- Tab nav bar -->
+                        <div id="tabs" class="row">
+                            <ul id="tabs-list" class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a id="solve-tab" href="#solve" aria-controls="solve" role="tab" data-toggle="tab">Editor</a></li>
+                                <li role="presentation"><a id="solution-tab" href="#solutions" aria-controls="profile" role="tab" data-toggle="tab">Solutions</a></li>
+                            </ul>
                         </div>
 
-                        <br>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
 
-                        <!-- Editor -->
-                        <pre id="editor"></pre>
+                            <!-- Editor tab -->
+                            <div role="tabpanel" class="tab-pane active" id="solve">
+                                <br>
+                                <!-- Editor controls -->
+                                <div class="row">
+                                    <!-- Languages dropdown -->
+                                    <div class="col-sm-6">
+                                        <div class="dropdown">
+                                            <button class="btn btn-default dropdown-toggle" id="lang-button" type="button" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                                Loading languages...
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" id="lang-dropdown-list" aria-labelledby="lang-button">
+                                                <li>Loading languages...</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit button -->
+                                    <div class="col-sm-2 col-sm-offset-4">
+                                        <button class="btn btn-success pull-right" id="submit-button">Submit Code</button>
+                                    </div>
+                                </div>
+
+                                <br>
+
+                                <!-- Editor -->
+                                <pre id="editor"></pre>
+                            </div>
+                            <!-- End editor tab -->
+
+                            <!-- Solutions tab -->
+                            <div role="tabpanel" class="tab-pane" id="solutions">
+                                <div class="col-sm-offset-3 col-sm-6">
+                                    <div class="panel-heading">
+                                        <h3 class="text-center">Your Submissions</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <ul id="solutions-list" class="list-group">
+                                            <li class="list-group-item" id="loading-submission">
+                                                <h4 class="list-group-item-heading">Loading submissions...</h4>
+                                                <p class="list-group-item-text">Loading submissions...</p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End solutions tab -->
+                        </div>
                     </div>
                 </div>
 
@@ -121,11 +156,9 @@
         }
         });
     </script>
+    <!-- Parse MathJax -->
     <script type="text/x-mathjax-config">
         MathJax.Hub.Queue(function() {
-            // Fix <code> tags after MathJax finishes running. This is a
-            // hack to overcome a shortcoming of Markdown. Discussion at
-            // https://github.com/mojombo/jekyll/issues/199
             var all = MathJax.Hub.getAllJax(), i;
             for(i = 0; i < all.length; i += 1) {
                 all[i].SourceElement().parentNode.className += ' has-jax';

@@ -107,8 +107,27 @@ socket.on("problem-response", function (problem) {
         // Set the dropdown button text
         $("#lang-button").html(curLang.name + ' <span class="caret"></span>');
     }
+
     // Retrigger MathJax
     MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+
+    // Get past submissions
+    socket.emit("problem-submissions-request", pid);
+});
+
+// Get submissions
+socket.on("problem-submissions-response", function (data) {
+    
+    if (data && data.length > 0) {
+        data.forEach(function (val, index, arr) {
+            console.log(val);
+            $("#solutions-list").append('<li class="list-group-item"><h4 class="list-group-item-heading">' + val.creation + '</h4><p class="list-group-item-text">Language: ' + val.language + '<br>Points: ' + val.points + '<br><br><button class="load-submission-code btn btn-default" data-code="' + val.code + '">Load Code in Editor</button></p></li>');
+        });
+        // Remove the first loading item
+        $("#loading-submission").remove();
+    } else {
+        $("#solutions > div > div.panel-body").html("<h4>There's nothing here. Switch to the editor tab to solve this problem.");
+    }
 });
 
 // Dropdown languages
@@ -188,6 +207,14 @@ $('#result-modal').on("hidden.bs.modal", function (event) {
     $("#submission-status").text("Sending code to server...");
     $("#results-list").remove();
     $("#result-footer").remove();
+});
+
+// Set editor code
+$(document).on("click", ".load-submission-code", function() {
+    // Set the editor value
+    editor.setValue($(this).data("code"), -1);
+    // Go to the editor tab
+    $("#solve-tab").tab("show");
 });
 
 // Functions
