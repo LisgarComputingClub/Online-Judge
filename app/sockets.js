@@ -179,16 +179,34 @@ module.exports = function (io, sessionMiddleware) {
                 if (typeof doc != "undefined") {
                     // Tell the client that we found the problem in the database
                     socket.emit("submission-status", "found");
+                    var s = new Submission({
+                        sid: getNextSequence("submissionCounter"),
+                        pid: doc.pid,
+                        author: "U.N. Owen",
+                        creation: new Date(),
+                        status: "test",
+                        points: 0,
+                        code: data.code,
+                        language: data.lang
+                    });
 
                     var num_eval = 0;
                     var num_eval_2 = 0;
                     var score = 0.0;
+                    var abort = false;
                     socket.emit("submission-status", "evaluated");
                     socket.emit("submission-status", doc.testcases.input.length);
                     for (i = 0; i < doc.testcases.input.length; i++) {
                         // Run code through HackerRank
-                        HackerRank.evaluateCode(i, data.code, data.lang, doc.testcases.input.slice(i, i + 1), doc.testcases.output.slice(i, i + 1), (res) => {
-                            if (res.results[0] === true) {
+                        HackerRank.evaluateCode(i, data.code, data.lang, doc.testcases.input.slice(i, i + 1), doc.testcases.output.slice(i, i + 1), HackerRank.defaultChecker, (res) => {
+                            if (abort) {
+                                return;
+                            }
+                            if (typeof res.results[0] == "string" && res.results[0].substr(0, 4) == "solu") {
+                                abort = true;
+                                socket.emit("submission-results", res);
+                                return;
+                            } else if (res.results[0] === true) {
                                 if (doc.testcases.weight != undefined) {
                                     score += doc.testcases.weight[res.case] * doc.points;
                                 } else {
@@ -196,7 +214,6 @@ module.exports = function (io, sessionMiddleware) {
                                 }
                             }
 
-                            console.log(res);
                             // Send the results to the client
                             socket.emit("submission-results", res);
                             num_eval++;
@@ -221,19 +238,8 @@ module.exports = function (io, sessionMiddleware) {
                                             break;
                                         }
                                     }
-
-                                    var d = new Date();
-                                    var s = new Submission({
-                                        sid: getNextSequence("submissionCounter"),
-                                        pid: doc.pid,
-                                        author: found.grader.username,
-                                        creation: d,
-                                        status: "test",
-                                        points: score,
-                                        code: data.code,
-                                        language: data.lang
-                                    });
-                                    console.log(s.sid);
+                                    s.author = found.grader.username;
+                                    s.points = score;
                                     s.save();
                                     if (i < 0) {
                                         // Add this problem to solved problems
@@ -249,12 +255,10 @@ module.exports = function (io, sessionMiddleware) {
                                         found.grader.problemsSolved[i] = { sid: s.sid, pid: doc.pid, name: doc.name, points: score, maxpoints: doc.points };
                                         found.save();
                                     }
-
                                 });
                             }
                         });
                     }
-
                 } else {
                     // Error
                     console.log("Error");
@@ -291,6 +295,7 @@ module.exports = function (io, sessionMiddleware) {
             });
         });
 
+       
         // Problem editor list
         socket.on("editor-list-request", (data) => {
             // Double check that usernames match

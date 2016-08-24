@@ -44,9 +44,9 @@ socket.on("submission-results", function (data) {
     var result = data.results[0];
     console.log(result);
     if (typeof result == "string" && result.substr(0, 4) == "solu") {
-        $("div.modal-body").append('<div class="result-wrong">' + result.trunc(80) + '</div>');
+        $("div.modal-body").append('<div class="result-wrong" id="message"><xmp>' + result.trunc(80) + '</xmp></div>');
+        $("#results-list").remove();
     } else {
-
         var message = data.message[0];
         var time = data.time[0];
         // Add results to the list
@@ -242,7 +242,7 @@ function getKeyByValue(obj, value) {
 
 String.prototype.trunc =
     function (n) {
-        return this.substr(0, n - 1) + (this.length > n ? '&hellip;' : '');
+        return this.substr(0, n - 1) + (this.length > n ? "..." : "");
     };
 
 // HackerRank's languages list
