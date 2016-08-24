@@ -42,12 +42,13 @@ socket.on("submission-status", function(data) {
 // Display code results
 socket.on("submission-results", function(data) {
     var result = data.results[0];
-    var message = data.message[0];
-    var time = data.time[0];
     console.log(result);
     if (typeof result == "string" && result.substr(0, 4) == "solu") {
         $("div.modal-body").append('<div class="result-wrong">' + result.trunc(80) + '</div>');
     } else {
+
+        var message = data.message[0];
+        var time = data.time[0];
         // Add results to the list
         if (result === true) {
             $("#test-result-" + data.casen.toString()).html("<li>[" + time + "s] <div class=\"result-correct\">Correct</div></li>");
