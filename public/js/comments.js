@@ -110,11 +110,12 @@ $(document).on('click', '#edit-cancel-button', function() {
 });
 
 $(document).on('click', '#edit-save-button', function() {
+    var newText = $(this).parent().children().eq(0).val();
     socket.emit('comment-edit-request', {
         id: $(this).data("id"),
-        text: $(this).parent().children().eq(0).val()
+        text: newText
     });
-    $(this).parent().html('<p class="list-group-item-text">' + $(this).parent().children().eq(0).data("default") + '</p>');
+    $(this).parent().html('<p class="list-group-item-text">' + newText + '</p>');
 });
 
 // Get comment submissions

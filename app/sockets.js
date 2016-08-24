@@ -21,11 +21,11 @@ var Counter = require("./models/counter.js");
 var languages;
 // Check if languages file exists
 exists.exists("languages.json", (data) => {
-    if(data) {
+    if (data) {
         // Read in languages
         fs.readFile("languages.json", (err, data) => {
             // Check for errors
-            if(err) {
+            if (err) {
                 throw err;
             } else {
                 languages = JSON.parse(data);
@@ -103,7 +103,7 @@ module.exports = function (io, sessionMiddleware) {
             // Get array of problems
             Problem.find({}, (err, problems) => {
                 // Check for errors
-                if(err) {
+                if (err) {
                     console.log("Error getting list of problems: " + err);
                 } else {
                     // Generate an array of problems
@@ -127,11 +127,11 @@ module.exports = function (io, sessionMiddleware) {
         // Get info for an individual problem
         socket.on("problem-request", (data) => {
             // Get problem data
-            Problem.find({pid: data}, (err, problem) => {
+            Problem.find({ pid: data }, (err, problem) => {
                 // Check for errors
-                if(err) {
+                if (err) {
                     console.log("Error getting info for problem " + pid + ": " + err);
-                } else if(problem.length > 0) {
+                } else if (problem.length > 0) {
                     // Send the problem data to the user
                     console.log("emitting problem");
                     socket.emit("problem-response", problem[0]);
@@ -147,16 +147,16 @@ module.exports = function (io, sessionMiddleware) {
             // Get profile data
             User.findOne({ "grader.username": data }, (err, doc) => {
                 // Check for errors
-                if(err) {
+                if (err) {
                     console.log(err);
                 }
                 // Check if we found a doc
-                if(typeof doc != "undefined") {
+                if (typeof doc != "undefined") {
                     var userObj = {
                         name: doc.google.name,
                         grader: doc.grader
                     };
-                    socket.emit("profile-response", userObj);                   
+                    socket.emit("profile-response", userObj);
                 } else {
                     // The user doesn't exist, redirect the user
                     socket.emit("redirect", "/users");
@@ -171,7 +171,7 @@ module.exports = function (io, sessionMiddleware) {
             // Get this problem's info
             Problem.findOne({ "pid": data.pid }, (err, doc) => {
                 // Check for errors
-                if(err) {
+                if (err) {
                     console.log(err);
                 }
 
@@ -202,7 +202,7 @@ module.exports = function (io, sessionMiddleware) {
                             num_eval++;
 
                             if (num_eval == doc.testcases.input.length) {
-                                
+
                                 if (Math.abs(score - doc.points) <= 0.0001) {
                                     score = doc.points;
                                 }
@@ -235,10 +235,10 @@ module.exports = function (io, sessionMiddleware) {
                                     });
                                     console.log(s.sid);
                                     s.save();
-                                    if(i < 0) {
+                                    if (i < 0) {
                                         // Add this problem to solved problems
                                         if (score != 0) {
-                                            found.grader.problemsSolved.push({sid: s.sid, pid: doc.pid, name: doc.name, points: score, maxpoints: doc.points});
+                                            found.grader.problemsSolved.push({ sid: s.sid, pid: doc.pid, name: doc.name, points: score, maxpoints: doc.points });
                                             found.grader.points += score;
                                             // Save user
                                             found.save();
@@ -246,15 +246,15 @@ module.exports = function (io, sessionMiddleware) {
                                     } else {
                                         found.grader.points -= found.grader.problemsSolved[i].points;
                                         found.grader.points += score;
-                                        found.grader.problemsSolved[i] = {sid: s.sid, pid: doc.pid, name: doc.name, points: score, maxpoints: doc.points};
+                                        found.grader.problemsSolved[i] = { sid: s.sid, pid: doc.pid, name: doc.name, points: score, maxpoints: doc.points };
                                         found.save();
                                     }
-                                    
+
                                 });
                             }
                         });
                     }
-                    
+
                 } else {
                     // Error
                     console.log("Error");
@@ -264,7 +264,7 @@ module.exports = function (io, sessionMiddleware) {
 
         socket.on("submission-request", (data) => {
             console.log("request received for " + data);
-            Submission.findOne({sid: data}, (err, submissionDoc) => {
+            Submission.findOne({ sid: data }, (err, submissionDoc) => {
                 if (err) {
                     console.log(err);
                 }
@@ -277,9 +277,9 @@ module.exports = function (io, sessionMiddleware) {
                         }
                     }
                     if (i >= 0) {
-                        Problem.findOne({pid: submissionDoc.pid}, (err, problemDoc) => {
+                        Problem.findOne({ pid: submissionDoc.pid }, (err, problemDoc) => {
                             if (problemDoc.points == userDoc.grader.problemsSolved[i].points || submissionDoc.author == userDoc.grader.username) {
-                                socket.emit("submission-response", submissionDoc);        
+                                socket.emit("submission-response", submissionDoc);
                             } else {
                                 socket.emit("submission-response", "unauth");
                             }
@@ -287,7 +287,7 @@ module.exports = function (io, sessionMiddleware) {
                     } else {
                         socket.emit("submission-response", "unauth");
                     }
-                });                
+                });
             });
         });
 
@@ -295,7 +295,7 @@ module.exports = function (io, sessionMiddleware) {
         socket.on("editor-list-request", (data) => {
             // Double check that usernames match
             User.findById(socket.request.session.passport.user, (err, userDoc) => {
-                if(err || userDoc.grader.username != data) {
+                if (err || userDoc.grader.username != data) {
                     // Redirect the user
                     socket.emit("redirect", "/");
                     // Stop
@@ -327,11 +327,11 @@ module.exports = function (io, sessionMiddleware) {
         // Get Comments
         socket.on("comments-request", (data) => {
             // Check the type of comments
-            if(data.type == "problem") {
+            if (data.type == "problem") {
                 // Find comments
                 Comment.find({ contentType: "problem", contentId: data.pid, deleted: false }, (err, docs) => {
                     // Check if we found something
-                    if(!docs || err) {
+                    if (!docs || err) {
                         // Redirect the user
                         socket.emit("redirect", "/problems");
                         // Stop
@@ -384,6 +384,43 @@ module.exports = function (io, sessionMiddleware) {
                     });
                 }
             })
+        });
+
+        socket.on("problem-submissions-request", (data) => {
+            // Check if a problem ID was specified
+            if (data) {
+                // Find the user
+                User.findById(socket.request.session.passport.user, (err, userDoc) => {
+                    // Check if we found the user
+                    if (userDoc) {
+                        // Find submissions for the user
+                        Submission.find({ pid: data, author: userDoc.grader.username }, (err, submissionDocs) => {
+                            if (submissionDocs) {
+                                // Build a safer array of submissions
+                                var submissionsArr = [];
+                                if (submissionDocs.length > 0) {
+                                    submissionDocs.forEach((val, index, arr) => {
+                                        submissionsArr.push({
+                                            sid: val.sid,
+                                            creation: val.creation,
+                                            status: val.status,
+                                            points: val.points,
+                                            code: val.code,
+                                            language: val.language
+                                        });
+                                    });
+                                }
+                            }
+                            // Send the array to the user
+                            socket.emit("problem-submissions-response", submissionsArr);
+                        });
+                    } else if (err) {
+                        console.log(err);
+                    } else if (!userDoc) {
+                        console.log("No user found for submission request: " + JSON.stringify(data));
+                    }
+                });
+            }
         });
     });
 };
