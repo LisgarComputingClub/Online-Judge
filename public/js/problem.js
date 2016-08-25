@@ -44,7 +44,7 @@ socket.on("submission-results", function (data) {
     var result = data.results[0];
     console.log(result);
     if (typeof result == "string" && result.substr(0, 4) == "solu") {
-        $("div.modal-body").append('<div class="result-wrong" id="message"><xmp>' + result.trunc(80) + '</xmp></div>');
+        $("div.modal-body").append('<div class="result-wrong" id="message">' + escapeHtml(result.trunc(80)) + '</div>');
         $("#results-list").remove();
     } else {
         var message = data.message[0];
@@ -92,7 +92,7 @@ socket.on("problem-response", function (problem) {
 
     // Fill the dropdown
     dropdown.forEach(function (val, index, arr) {
-        $("#lang-dropdown-list").append('<li><a class="set-lang noselect" data-target="#" data-name="' + val.name + '" data-lang="' + val.lang + '" data-code="' + val.code + '">' + val.name + '</a></li>');
+        $("#lang-dropdown-list").append('<li><a class="set-lang noselect" data-target="#" data-name="' + val.name + '" data-lang="' + val.lang + '" data-code="' + escapeHtml(val.code) + '">' + val.name + '</a></li>');
     });
 
     // Remove the loading item
@@ -122,7 +122,7 @@ socket.on("problem-submissions-response", function (data) {
     if (data && data.length > 0) {
         data.forEach(function (val, index, arr) {
             console.log(val);
-            $("#solutions-list").append('<li class="list-group-item"><h4 class="list-group-item-heading">' + val.creation + '</h4><p class="list-group-item-text">Language: ' + val.language + '<br>Points: ' + val.points + '<br><br><button class="load-submission-code btn btn-default" data-code="' + val.code + '">Load Code in Editor</button></p></li>');
+            $("#solutions-list").append('<li class="list-group-item"><h4 class="list-group-item-heading">' + val.creation + '</h4><p class="list-group-item-text">Language: ' + val.language + '<br>Points: ' + val.points + '<br><br><button class="load-submission-code btn btn-default" data-code="' + escapeHtml(val.code) + '">Load Code in Editor</button></p></li>');
         });
         // Remove the first loading item
         $("#loading-submission").remove();
@@ -219,6 +219,20 @@ $(document).on("click", ".load-submission-code", function() {
 });
 
 // Functions
+var entityMap = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': '&quot;',
+  "'": '&#39;',
+  "/": '&#x2F;'
+};
+
+function escapeHtml(string) {
+  return String(string).replace(/[&<>"'\/]/g, function (s) {
+    return entityMap[s];
+  });
+}
 
 // Converts languages list into a nice formatted one
 function convertLanguages(languages) {
