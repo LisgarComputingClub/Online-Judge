@@ -18,6 +18,10 @@ var problemSchema = mongoose.Schema({
         input: [String],
         output: [String],
         points: [Number]
+    },
+    contest: {
+        cid: String,
+        points: Number
     }
 });
 
