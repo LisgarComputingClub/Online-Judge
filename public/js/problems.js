@@ -21,7 +21,7 @@ socket.on("problems-response", function(problemArr) {
     problemList.clear();
     // Insert it into the table
     problemArr.forEach(function(val, index, arr) {
-        problemList.add({ name: val.name, link: "/problem?pid=" + val.pid, points: val.points, partial: val.partial, languages: convertLanguages(val.languages).join(", ")});
+        problemList.add({ name: val.name, link: "/problem?pid=" + val.pid, points: val.points, partial: val.partial, languages: (val.languages.length < 1) ? "any" : convertLanguages(val.languages).join(", ")});
     });
     // Loop through table rows turning names into links
     $("#problems-table-tbody > tr > td.name.link").each(function() {
