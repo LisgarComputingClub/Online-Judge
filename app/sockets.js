@@ -170,24 +170,30 @@ module.exports = function (io, sessionMiddleware) {
 
         // Get info for a user profile
         socket.on("profile-request", (data) => {
-            // Get profile data
-            User.findOne({ "grader.username": data }, (err, doc) => {
-                // Check for errors
-                if (err) {
-                    console.log(err);
-                }
-                // Check if we found a doc
-                if (typeof doc != "undefined") {
-                    var userObj = {
-                        name: doc.google.name,
-                        grader: doc.grader
-                    };
-                    socket.emit("profile-response", userObj);
-                } else {
-                    // The user doesn't exist, redirect the user
-                    socket.emit("redirect", "/users");
-                }
-            });
+            // Check if a username was sent
+            if(data) {
+                // Get profile data
+                User.findOne({ "grader.username": data }, (err, doc) => {
+                    // Check for errors
+                    if (err) {
+                        console.log(err);
+                    }
+                    // Check if we found a doc
+                    if (doc) {
+                        var userObj = {
+                            name: doc.google.name,
+                            grader: doc.grader
+                        };
+                        socket.emit("profile-response", userObj);
+                    } else {
+                        // The user doesn't exist, redirect the user
+                        socket.emit("redirect", "/users");
+                    }
+                });
+            } else {
+                // Redirect the socket
+                socket.emit("redirect", "/users");
+            }
         });
 
         // Get code submissions
