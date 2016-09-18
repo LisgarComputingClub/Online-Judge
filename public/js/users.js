@@ -17,7 +17,7 @@ socket.on("users-response", function(userArr) {
     userList.clear();
     // Insert it into the table
     userArr.forEach(function(val, index, arr) {
-        userList.add({ username: val.username, name: val.name, usernamelink: "/profile?username=" + val.username, namelink: "/profile?username=" + val.username, school: val.school, points: val.points});
+        userList.add({ username: val.username, name: val.name, usernamelink: "/profile?username=" + val.username, namelink: "/profile?username=" + val.username, school: (val.school) ? val.school : "", points: val.points});
     });
     // Loop through table rows turning names into links
     $("#users-table-tbody > tr > td.username.usernamelink").each(function() {
