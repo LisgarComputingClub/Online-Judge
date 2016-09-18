@@ -126,46 +126,52 @@ module.exports = function (io, sessionMiddleware) {
 
         // Get info for an individual problem
         socket.on("problem-request", (data) => {
-            // Get problem data
-            Problem.find({ pid: data }, (err, problem) => {
-                // Check for errors
-                if (err) {
-                    console.log("Error getting info for problem " + pid + ": " + err);
-                } else if (problem.length > 0) {
-                    if (problem[0].contest == undefined) {
-                        // Send the problem data to the user
-                        console.log("emitting problem");
-                        socket.emit("problem-response", problem[0]);
-                    } else {
-                        //dw it probably works 
-                        Contest.findOne({ cid: problem[0].contest.cid }, (err, contest) => {
-                            if (err) {
-                                console.log("Error getting contest info for " + cid + ": " + err);
-                            } else {
-                                var d = new Date();
-                                if (d >= contest.start) {
-                                    User.findById(socket.request.session.passport.user, (err, user) => {
-                                        if (err) {
-                                            console.log("Error getting user info");
-                                        } else {
-                                            if (contest.users.indexOf(user.grader.username) > -1) {
-                                                socket.emit("problem-response", problem[0]);
-                                            } else {
-                                                console.log("This user is not registered");
-                                            }
-                                        }
-                                    });
+            // Check if data was sent
+            if(data) {
+                // Get problem data
+                Problem.find({ pid: data }, (err, problem) => {
+                    // Check for errors
+                    if (err) {
+                        console.log("Error getting info for problem " + pid + ": " + err);
+                    } else if (problem.length > 0) {
+                        if (problem[0].contest == undefined) {
+                            // Send the problem data to the user
+                            console.log("emitting problem");
+                            socket.emit("problem-response", problem[0]);
+                        } else {
+                            //dw it probably works 
+                            Contest.findOne({ cid: problem[0].contest.cid }, (err, contest) => {
+                                if (err) {
+                                    console.log("Error getting contest info for " + cid + ": " + err);
                                 } else {
-                                    console.log("This contest has not started yet");
+                                    var d = new Date();
+                                    if (d >= contest.start) {
+                                        User.findById(socket.request.session.passport.user, (err, user) => {
+                                            if (err) {
+                                                console.log("Error getting user info");
+                                            } else {
+                                                if (contest.users.indexOf(user.grader.username) > -1) {
+                                                    socket.emit("problem-response", problem[0]);
+                                                } else {
+                                                    console.log("This user is not registered");
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        console.log("This contest has not started yet");
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
+                    } else {
+                        // The problem doesn't exist, redirect the user
+                        socket.emit("redirect", "/problems");
                     }
-                } else {
-                    // The problem doesn't exist, redirect the user
-                    socket.emit("redirect", "/problems");
-                }
-            });
+                });
+            } else {
+                // Redirect the user
+                socket.emit("redirect", "/problems");
+            }
         });
 
         // Get info for a user profile
