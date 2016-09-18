@@ -16,6 +16,7 @@ var Submission = require("./models/submission.js");
 var Comment = require("./models/comment.js");
 // Counter model
 var Counter = require("./models/counter.js");
+var Contest = require("./models/contest.js");
 
 // Get languages
 var languages;

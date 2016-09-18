@@ -3,7 +3,7 @@ var mongoose = require("mongoose");
 
 // Problem schema
 var contestSchema = mongoose.Schema({
-    cid: String
+    cid: String,
     start: Date,
     end: Date,
     problems: [{
