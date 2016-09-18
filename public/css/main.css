@@ -31,3 +31,7 @@
 .comment-error {
   color: red;
 }
+
+.no-list {
+  list-style: none;
+}

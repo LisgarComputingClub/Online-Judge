@@ -135,7 +135,7 @@ module.exports = function (io, sessionMiddleware) {
                     if (err) {
                         console.log("Error getting info for problem " + pid + ": " + err);
                     } else if (problem.length > 0) {
-                        if (problem[0].contest == undefined) {
+                        if (!problem.contest) {
                             // Send the problem data to the user
                             console.log("emitting problem");
                             socket.emit("problem-response", problem[0]);

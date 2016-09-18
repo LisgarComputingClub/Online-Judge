@@ -45,6 +45,7 @@
                                 <li>If you want to use images, use a reliable, safe image host such as <a href="https://imgur.com">Imgur</a>.</li>
                                 <li>TeX math can be used by putting it inbetween <span class="tex2jax_ignore">`$ and $`</span>.
                                     For example: <span class="tex2jax_ignore">`$ a + b = c $`</span></li>
+                                <li>You <b>must</b> include sample input and sample output in the problem statement.</li>
                             </ul>
                         </div>
                     </div>
@@ -139,6 +140,48 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <form id="allowed-languages-right"></form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testcases -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="text-center">Testcases</h4>
+                        </div>
+                        <div class="panel-body">
+
+                            <!-- Points -->
+                            <div class="row">
+                                <div class="col-sm-3 col-sm-offset-1">
+                                    <div class="form-group">
+                                        <label for="testcase-points">Points per testcase: </label>
+                                        <input type="number" class="form-control" id="testcase-points" placeholder="1">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Input and output -->
+                            <div class="row">
+                                <!-- Input -->
+                                <div class="col-sm-6">
+                                    <h5>Input</h5>
+                                    <ul id="no-list testcases-input-list">
+                                        <textarea id="testcase-input" class="form-control"></textarea>
+                                    </ul>
+                                </div>
+
+                                <!-- Output -->
+                                <div class="col-sm-6">
+                                    <h5>Output</h5>
+                                    <ul id="no-list testcases-output-list">
+                                        <textarea id="testcase-output" class="form-control"></textarea>
+                                    </ul>
                                 </div>
                             </div>
                         </div>

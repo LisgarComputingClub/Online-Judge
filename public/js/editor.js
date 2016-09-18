@@ -101,6 +101,9 @@ socket.on("problem-response", function (problem) {
 
     // Retrigger MathJax
     MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+
+    // Add testcases
+    console.log(problem);
 });
 
 // Dropdown languages
