@@ -77,7 +77,7 @@ module.exports = function (io, sessionMiddleware) {
         // Get list of users
         socket.on("users-request", (data) => {
             // Get array of users
-            User.find({}, (err, users) => {
+            User.find({ "grader.firstLogin": false }, (err, users) => {
                 // Check for errors
                 if (err) {
                     console.log("Error getting list of users: " + err);
