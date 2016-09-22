@@ -1,5 +1,9 @@
 ### Database Schema
 
+Add data to the database like so:
+
+`node gridfs-add.js data_file.json pid.json`, where the latter file is named after the pid of the desired problem. Alternatively, you may do `node gridfs-add.js pid.json` if the test file already shares a name with the pid.
+
 The `problems` collection stores metadata pertinent to each problem.
 
 ```

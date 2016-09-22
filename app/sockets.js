@@ -16,8 +16,10 @@ var Submission = require("./models/submission.js");
 var Comment = require("./models/comment.js");
 // Counter model
 var Counter = require("./models/counter.js");
+// Contest model
 var Contest = require("./models/contest.js");
-
+// Test data model
+var Test = require("./models/test.js");
 // Get languages
 var languages;
 // Check if languages file exists
@@ -209,99 +211,100 @@ module.exports = function (io, sessionMiddleware) {
             socket.emit("submission-status", "received");
             // Get this problem's info
             Problem.findOne({ "pid": data.pid }, (err, doc) => {
-                // Check for errors
-                if (err) {
-                    console.log(err);
-                }
-
-                // Check if we found a doc
-                if (typeof doc != "undefined") {
-                    // Tell the client that we found the problem in the database
-                    socket.emit("submission-status", "found");
-                    var s = new Submission({
-                        sid: getNextSequence("submissionCounter"),
-                        pid: doc.pid,
-                        author: "U.N. Owen",
-                        creation: new Date(),
-                        status: "test",
-                        points: 0,
-                        code: data.code,
-                        language: data.lang
-                    });
-
-                    var num_eval = 0;
-                    var num_eval_2 = 0;
-                    var score = 0.0;
-                    var abort = false;
-                    socket.emit("submission-status", "evaluated");
-                    socket.emit("submission-status", doc.testcases.input.length);
-                    for (i = 0; i < doc.testcases.input.length; i++) {
-                        // Run code through HackerRank
-                        HackerRank.evaluateCode(i, data.code, data.lang, doc.testcases.input.slice(i, i + 1), doc.testcases.output.slice(i, i + 1), HackerRank.defaultChecker, (res) => {
-                            if (abort) {
-                                return;
-                            }
-                            if (typeof res.results[0] == "string" && res.results[0].substr(0, 4) == "solu") {
-                                abort = true;
-                                socket.emit("submission-results", res);
-                                return;
-                            } else if (res.results[0] === true) {
-                                if (doc.testcases.weight != undefined) {
-                                    score += doc.testcases.weight[res.case] * doc.points;
-                                } else {
-                                    score += doc.points / doc.testcases.input.length;
+                Test.getData(data.pid, (testcases) => {
+                    // Check for errors
+                    if (err) {
+                        console.log(err);
+                    }
+                    console.log(testcases);
+                    // Check if we found a doc
+                    if (typeof doc != "undefined") {
+                        // Tell the client that we found the problem in the database
+                        socket.emit("submission-status", "found");
+                        var s = new Submission({
+                            sid: getNextSequence("submissionCounter"),
+                            pid: doc.pid,
+                            author: "U.N. Owen",
+                            creation: new Date(),
+                            status: "test",
+                            points: 0,
+                            code: data.code,
+                            language: data.lang
+                        });
+                        var num_eval = 0;
+                        var num_eval_2 = 0;
+                        var score = 0.0;
+                        var abort = false;
+                        socket.emit("submission-status", "evaluated");
+                        socket.emit("submission-status", doc.testcases.input.length);
+                        for (i = 0; i < doc.testcases.input.length; i++) {
+                            // Run code through HackerRank
+                            HackerRank.evaluateCode(i, data.code, data.lang, testcases.input.slice(i, i + 1), testcases.output.slice(i, i + 1), HackerRank.defaultChecker, (res) => {
+                                if (abort) {
+                                    return;
                                 }
-                            }
-
-                            // Send the results to the client
-                            socket.emit("submission-results", res);
-                            num_eval++;
-
-                            if (num_eval == doc.testcases.input.length) {
-
-                                if (Math.abs(score - doc.points) <= 0.0001) {
-                                    score = doc.points;
-                                }
-                                if (!doc.partial && score < doc.points) {
-                                    score = 0;
-                                }
-
-                                console.log(score);
-
-                                //TODO: points worked out here; score contains total score for this submission (counts partial vs no partial)
-                                User.findById(socket.request.session.passport.user, (err, found) => {
-                                    var i = -1;
-                                    for (var j = 0; j < found.grader.problemsSolved.length; j++) {
-                                        if (found.grader.problemsSolved[j].pid === doc.pid) {
-                                            i = j;
-                                            break;
-                                        }
+                                if (typeof res.results[0] == "string" && res.results[0].substr(0, 4) == "solu") {
+                                    abort = true;
+                                    socket.emit("submission-results", res);
+                                    return;
+                                } else if (res.results[0] === true) {
+                                    if (doc.testcases.weight != undefined) {
+                                        score += doc.testcases.weight[res.case] * doc.points;
+                                    } else {
+                                        score += doc.points / doc.testcases.input.length;
                                     }
-                                    s.author = found.grader.username;
-                                    s.points = score;
-                                    s.save();
-                                    if (i < 0) {
-                                        // Add this problem to solved problems
-                                        if (score != 0) {
-                                            found.grader.problemsSolved.push({ sid: s.sid, pid: doc.pid, name: doc.name, points: score, maxpoints: doc.points });
+                                }
+
+                                // Send the results to the client
+                                socket.emit("submission-results", res);
+                                num_eval++;
+
+                                if (num_eval == doc.testcases.input.length) {
+
+                                    if (Math.abs(score - doc.points) <= 0.0001) {
+                                        score = doc.points;
+                                    }
+                                    if (!doc.partial && score < doc.points) {
+                                        score = 0;
+                                    }
+
+                                    console.log(score);
+
+                                    //TODO: points worked out here; score contains total score for this submission (counts partial vs no partial)
+                                    User.findById(socket.request.session.passport.user, (err, found) => {
+                                        var i = -1;
+                                        for (var j = 0; j < found.grader.problemsSolved.length; j++) {
+                                            if (found.grader.problemsSolved[j].pid === doc.pid) {
+                                                i = j;
+                                                break;
+                                            }
+                                        }
+                                        s.author = found.grader.username;
+                                        s.points = score;
+                                        s.save();
+                                        if (i < 0) {
+                                            // Add this problem to solved problems
+                                            if (score != 0) {
+                                                found.grader.problemsSolved.push({ sid: s.sid, pid: doc.pid, name: doc.name, points: score, maxpoints: doc.points });
+                                                found.grader.points += score;
+                                                // Save user
+                                                found.save();
+                                            }
+                                        } else {
+                                            found.grader.points -= found.grader.problemsSolved[i].points;
                                             found.grader.points += score;
-                                            // Save user
+                                            found.grader.problemsSolved[i] = { sid: s.sid, pid: doc.pid, name: doc.name, points: score, maxpoints: doc.points };
                                             found.save();
                                         }
-                                    } else {
-                                        found.grader.points -= found.grader.problemsSolved[i].points;
-                                        found.grader.points += score;
-                                        found.grader.problemsSolved[i] = { sid: s.sid, pid: doc.pid, name: doc.name, points: score, maxpoints: doc.points };
-                                        found.save();
-                                    }
-                                });
-                            }
-                        });
+                                    });
+                                }
+                            });
+                        }
+                    } else {
+                        // Error
+                        console.log("Error");
                     }
-                } else {
-                    // Error
-                    console.log("Error");
-                }
+                });
             });
         });
 

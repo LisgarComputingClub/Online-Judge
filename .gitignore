@@ -43,8 +43,5 @@ jspm_packages
 # Visual Studio Code project settings
 .vscode
 
-# Don't worry
-test.js
-
 # Configs
 config
